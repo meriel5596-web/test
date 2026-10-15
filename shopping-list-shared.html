@@ -1,0 +1,359 @@
+<title>우리 집 장보기</title>
+<style>
+  /* 한 줄 레이아웃: 위 진행 머리글 → 추가 줄 → 종류별 카드 → 새 장보기 */
+  :root {
+    --bg: #f5f6ec;
+    --card: #ffffff;
+    --text: #263529;
+    --muted: #7f8c80;
+    --line: #e4e9dc;
+    --green: #43a047;
+    --green-strong: #2e7d32;
+    --green-soft: #e7f3e1;
+    --ring: #b9dc9a;
+    --on-green: #ffffff;
+    --danger: #c9433f;
+    --danger-soft: #fbe9e8;
+    --shadow: 0 2px 10px rgba(46, 125, 50, 0.08);
+    --font: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151b16; --card: #1e2620; --text: #e3ebe2; --muted: #93a093;
+      --line: #2c372e; --green: #5cb860; --green-strong: #8fd18f; --green-soft: #243326;
+      --ring: #4f7a45; --on-green: #10180f; --danger: #f08a85; --danger-soft: #3a2422;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151b16; --card: #1e2620; --text: #e3ebe2; --muted: #93a093;
+    --line: #2c372e; --green: #5cb860; --green-strong: #8fd18f; --green-soft: #243326;
+    --ring: #4f7a45; --on-green: #10180f; --danger: #f08a85; --danger-soft: #3a2422;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.5; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; display: grid; gap: 14px; }
+
+  header {
+    background: var(--green); color: var(--on-green);
+    border-radius: 20px; padding: 20px 22px 18px; box-shadow: var(--shadow);
+  }
+  header h1 { margin: 0; font-size: 1.55rem; letter-spacing: -0.02em; text-wrap: balance; }
+  .progress-text { margin: 4px 0 12px; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+  .bar { height: 10px; background: color-mix(in srgb, var(--on-green) 30%, transparent); border-radius: 99px; overflow: hidden; }
+  .bar > div { height: 100%; width: 0; background: var(--on-green); border-radius: 99px; transition: width 0.3s; }
+  .sync { margin: 10px 0 0; font-size: 0.8rem; opacity: 0.9; }
+
+  form.add {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    background: var(--card); border-radius: 16px; padding: 12px; box-shadow: var(--shadow);
+  }
+  form.add input, form.add select {
+    font: inherit; color: var(--text); background: var(--card);
+    border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; outline: none;
+  }
+  form.add input:focus, form.add select:focus { border-color: var(--green); }
+  form.add input { flex: 1 1 180px; min-width: 0; }
+  form.add select { flex: 0 1 150px; }
+  .btn {
+    font: inherit; font-weight: 700; cursor: pointer;
+    border: none; border-radius: 12px; padding: 10px 18px;
+    background: var(--green); color: var(--on-green);
+  }
+  .btn:hover { filter: brightness(0.93); }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+
+  #list { display: grid; gap: 14px; }
+  .card { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+  .card h2 {
+    margin: 0; padding: 12px 16px; font-size: 1.05rem;
+    background: var(--green-soft); color: var(--green-strong);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card h2 .count { font-size: 0.85rem; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+  ul { list-style: none; margin: 0; padding: 4px 0; }
+  li { display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 16px; border-top: 1px solid var(--line); }
+  li:first-child { border-top: none; }
+
+  .check {
+    flex: none; width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid var(--ring); background: var(--card); cursor: pointer;
+    display: grid; place-items: center; color: var(--on-green); font-size: 16px; padding: 0;
+  }
+  .check:hover { border-color: var(--green); }
+  li.done .check { background: var(--green); border-color: var(--green); }
+  .name { flex: 1; min-width: 0; cursor: pointer; overflow-wrap: anywhere; }
+  li.done .name { text-decoration: line-through; color: var(--muted); }
+  li.done .qty { opacity: 0.5; }
+
+  .qty { display: flex; align-items: center; gap: 4px; flex: none; }
+  .qty button {
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer; padding: 0;
+    border: 1px solid var(--line); background: var(--card); color: var(--green-strong); font-size: 16px; line-height: 1;
+  }
+  .qty button:hover { background: var(--green-soft); }
+  .qty span { min-width: 36px; text-align: center; font-weight: 600; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+  .del { flex: none; border: none; background: none; cursor: pointer; color: var(--muted); font-size: 18px; padding: 4px 6px; border-radius: 8px; }
+  .del:hover { color: var(--danger); background: var(--danger-soft); }
+
+  .readonly .check, .readonly .name, .readonly .qty button, .readonly .del { pointer-events: none; }
+  .readonly .qty button, .readonly .del { visibility: hidden; }
+
+  .empty { text-align: center; color: var(--muted); padding: 28px 16px; background: var(--card); border-radius: 18px; box-shadow: var(--shadow); }
+  .footer { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; }
+  .btn.ghost { background: var(--card); color: var(--green-strong); border: 2px solid var(--green); }
+  .btn.ghost:hover { background: var(--green-soft); filter: none; }
+  .confirm-text { width: 100%; text-align: center; margin: 0; color: var(--muted); }
+  .notice { margin: 0; text-align: center; color: var(--muted); font-size: 0.9rem; }
+  @media (prefers-reduced-motion: reduce) { .bar > div { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>🛒 우리 집 장보기</h1>
+    <p class="progress-text" id="progressText">목록을 불러오는 중이에요…</p>
+    <div class="bar"><div id="bar"></div></div>
+    <p class="sync" id="sync">연결하는 중…</p>
+  </header>
+
+  <form class="add" id="addForm">
+    <input id="newName" type="text" placeholder="살 것을 적어 주세요 (예: 사과)" autocomplete="off" maxlength="40" required>
+    <select id="newCat" aria-label="종류"></select>
+    <button class="btn" id="addBtn" type="submit">추가</button>
+  </form>
+
+  <main id="list">
+    <p class="empty">목록을 불러오는 중이에요. 잠시만 기다려 주세요.</p>
+  </main>
+
+  <div class="footer" id="footer">
+    <button class="btn ghost" id="resetBtn" type="button">🔄 새 장보기 (체크 모두 풀기)</button>
+  </div>
+  <p class="notice" id="notice" hidden></p>
+</div>
+
+<script>
+  const CATEGORIES = [
+    { id: "veg", name: "🥬 채소·과일" },
+    { id: "meat", name: "🥩 고기·생선" },
+    { id: "dairy", name: "🥛 유제품·계란" },
+    { id: "snack", name: "🍪 가공·간식" },
+    { id: "living", name: "🧻 생활용품" },
+    { id: "etc", name: "📦 기타" },
+  ];
+  const CAT_IDS = CATEGORIES.map(c => c.id);
+
+  let db = null;
+  let col = null;
+  let items = [];
+  let loaded = false;
+  let canWrite = true;
+  let confirming = false;
+
+  const $ = id => document.getElementById(id);
+
+  const catSelect = $("newCat");
+  for (const cat of CATEGORIES) {
+    const opt = document.createElement("option");
+    opt.value = cat.id;
+    opt.textContent = cat.name;
+    catSelect.append(opt);
+  }
+
+  function showNotice(msg) {
+    const n = $("notice");
+    n.textContent = msg;
+    n.hidden = !msg;
+  }
+
+  async function write(fn) {
+    try { await fn(); showNotice(""); }
+    catch (e) {
+      if (e && e.code === "invalid_argument") {
+        canWrite = false; render();
+        showNotice("이 링크로는 목록을 볼 수만 있어요. 고치려면 주인에게 '참여자' 이상 권한을 받아야 해요.");
+      } else if (e && e.code === "quota_exceeded") {
+        showNotice("저장 공간이 가득 찼어요. 안 쓰는 항목을 지운 뒤 다시 해 주세요.");
+      } else {
+        showNotice("저장하지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.");
+      }
+    }
+  }
+
+  function render() {
+    const list = $("list");
+    list.innerHTML = "";
+    document.body.classList.toggle("readonly", !canWrite);
+    $("addBtn").disabled = !canWrite || !col;
+    $("newName").disabled = !canWrite || !col;
+
+    const doneCount = items.filter(it => it.done).length;
+    $("progressText").textContent = !loaded ? "목록을 불러오는 중이에요…"
+      : items.length ? `${items.length}개 중 ${doneCount}개 담음` : "목록이 비어 있어요";
+    $("bar").style.width = items.length ? (doneCount / items.length * 100) + "%" : "0";
+
+    if (!loaded) {
+      list.innerHTML = '<p class="empty">목록을 불러오는 중이에요. 잠시만 기다려 주세요.</p>';
+      return;
+    }
+    if (!items.length) {
+      list.innerHTML = '<p class="empty">아직 살 것이 없어요.<br>위 칸에 적고 [추가]를 눌러 첫 항목을 넣어 보세요 🥕</p>';
+    }
+
+    for (const cat of CATEGORIES) {
+      const group = items
+        .filter(it => (CAT_IDS.includes(it.cat) ? it.cat : "etc") === cat.id)
+        .sort((a, b) => (a.done - b.done) || (a.createdAt - b.createdAt));
+      if (!group.length) continue;
+
+      const card = document.createElement("section");
+      card.className = "card";
+      const h2 = document.createElement("h2");
+      const title = document.createElement("span");
+      title.textContent = cat.name;
+      const count = document.createElement("span");
+      count.className = "count";
+      count.textContent = `${group.filter(it => !it.done).length}개 남음`;
+      h2.append(title, count);
+      const ul = document.createElement("ul");
+
+      for (const it of group) {
+        const ref = col.doc(it.id);
+        const li = document.createElement("li");
+        if (it.done) li.className = "done";
+
+        const check = document.createElement("button");
+        check.className = "check";
+        check.textContent = it.done ? "✓" : "";
+        check.setAttribute("aria-label", `${it.name} ${it.done ? "체크 풀기" : "체크하기"}`);
+        check.onclick = () => write(() => ref.update({ done: !it.done }));
+
+        const name = document.createElement("span");
+        name.className = "name";
+        name.textContent = it.name;
+        name.onclick = check.onclick;
+
+        const qty = document.createElement("div");
+        qty.className = "qty";
+        const minus = document.createElement("button");
+        minus.textContent = "−";
+        minus.setAttribute("aria-label", `${it.name} 수량 줄이기`);
+        minus.onclick = () => { if (it.qty > 1) write(() => ref.update({ qty: it.qty - 1 })); };
+        const num = document.createElement("span");
+        num.textContent = "× " + it.qty;
+        const plus = document.createElement("button");
+        plus.textContent = "+";
+        plus.setAttribute("aria-label", `${it.name} 수량 늘리기`);
+        plus.onclick = () => write(() => ref.update({ qty: it.qty + 1 }));
+        qty.append(minus, num, plus);
+
+        const del = document.createElement("button");
+        del.className = "del";
+        del.textContent = "✕";
+        del.setAttribute("aria-label", `${it.name} 지우기`);
+        del.onclick = () => write(() => ref.delete());
+
+        li.append(check, name, qty, del);
+        ul.append(li);
+      }
+      card.append(h2, ul);
+      list.append(card);
+    }
+    renderFooter();
+  }
+
+  function renderFooter() {
+    const footer = $("footer");
+    footer.innerHTML = "";
+    if (!confirming) {
+      const btn = document.createElement("button");
+      btn.className = "btn ghost";
+      btn.id = "resetBtn";
+      btn.type = "button";
+      btn.textContent = "🔄 새 장보기 (체크 모두 풀기)";
+      btn.disabled = !canWrite || !col || !items.some(it => it.done);
+      btn.onclick = () => { confirming = true; renderFooter(); };
+      footer.append(btn);
+      return;
+    }
+    const text = document.createElement("p");
+    text.className = "confirm-text";
+    text.textContent = "체크를 모두 풀까요? 항목은 그대로 남아요.";
+    const yes = document.createElement("button");
+    yes.className = "btn";
+    yes.id = "resetYes";
+    yes.type = "button";
+    yes.textContent = "네, 모두 풀기";
+    yes.onclick = async () => {
+      confirming = false;
+      const doneItems = items.filter(it => it.done);
+      renderFooter();
+      await write(async () => { for (const it of doneItems) await col.doc(it.id).update({ done: false }); });
+    };
+    const no = document.createElement("button");
+    no.className = "btn ghost";
+    no.id = "resetNo";
+    no.type = "button";
+    no.textContent = "취소";
+    no.onclick = () => { confirming = false; renderFooter(); };
+    footer.append(text, yes, no);
+  }
+
+  $("addForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!col || !canWrite) return;
+    const input = $("newName");
+    const name = input.value.trim();
+    if (!name) return;
+    const cat = catSelect.value;
+    input.value = "";
+    input.focus();
+    write(() => col.add({ name, cat, qty: 1, done: false, createdAt: Date.now() }));
+  });
+
+  render();
+
+  (async () => {
+    db = window.claude ? await window.claude.use("db") : null;
+    if (!db) {
+      loaded = true;
+      $("sync").textContent = "함께 쓰는 목록에 연결할 수 없어요. claude.ai에 로그인한 뒤 다시 열어 주세요.";
+      $("list").innerHTML = '<p class="empty">이 화면에서는 목록을 불러올 수 없어요.<br>claude.ai에 로그인한 상태로 링크를 열어 주세요.</p>';
+      $("progressText").textContent = "연결되지 않음";
+      $("addBtn").disabled = true; $("newName").disabled = true;
+      renderFooter(); $("resetBtn").disabled = true;
+      return;
+    }
+    col = db.collection("items");
+
+    const user = window.claude ? await window.claude.use("user") : null;
+    if (user) {
+      try { const w = await user.can("data.write"); if (w === false) canWrite = false; } catch (e) {}
+    }
+
+    col.onSnapshot((snap) => {
+      items = snap.docs.map(d => {
+        const v = d.data() || {};
+        return {
+          id: d.id,
+          name: String(v.name || ""),
+          cat: String(v.cat || "etc"),
+          qty: Math.max(1, Number(v.qty) || 1),
+          done: !!v.done,
+          createdAt: Number(v.createdAt) || 0,
+        };
+      }).filter(it => it.name);
+      loaded = true;
+      $("sync").textContent = canWrite
+        ? "✓ 폰·PC 어디서 바꿔도 모두에게 바로 보여요"
+        : "볼 수만 있는 상태예요";
+      render();
+    }, () => {
+      $("sync").textContent = "연결이 끊겼어요. 페이지를 새로고침해 주세요.";
+    });
+  })();
+</script>
