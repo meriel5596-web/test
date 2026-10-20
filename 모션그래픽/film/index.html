@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>김희정 AI 강사</title>
+<meta name="viewport" content="width=1080, height=1920">
+<link rel="stylesheet" href="./runtime/fonts.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+/* 9:16 세로 (1080x1920). ACCENT = "해냈다 / 검증됨" (체크, 마지막 단어). 다른 의미로 쓰지 않는다. */
+:root {
+  --paper: #F3F6FB;
+  --navy: #0A2463;
+  --navy-deep: #051640;
+  --ink: #0B1B3F;
+  --ink-soft: #5A6785;
+  --accent: #4F8CFF;
+  --font: "Pretendard Variable", "Pretendard", "Malgun Gothic", "Inter", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+body.play { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+body.play #main { position: relative; flex: none; }
+#main { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); color: var(--ink); font-family: var(--font); font-weight: 500; letter-spacing: -0.02em; }
+.scene { position: absolute; inset: 0; overflow: hidden; }
+.cam { position: absolute; inset: 0; }
+.abs { position: absolute; white-space: pre; }
+
+.light { background:
+  radial-gradient(900px 900px at 50% -8%, #FFFFFF 0%, rgba(255,255,255,0) 70%),
+  radial-gradient(800px 900px at 90% 108%, #DCE6F7 0%, rgba(220,230,247,0) 70%),
+  var(--paper); }
+.dark { color: #F4F7FF; background:
+  radial-gradient(900px 1100px at 50% 42%, #17418F 0%, rgba(23,65,143,0) 72%),
+  radial-gradient(1200px 1000px at 50% 115%, #0A2463 0%, rgba(10,36,99,0) 70%),
+  var(--navy-deep); }
+.grain { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .09; mix-blend-mode: overlay; }
+
+/* beat 1: the learner's input, cropped by the right edge */
+#field { position: absolute; left: 40px; top: 780px; width: 1100px; height: 360px; border-radius: 64px; background: #FFFFFF;
+  box-shadow: 0 2px 0 rgba(11,27,63,.04), 0 40px 90px -30px rgba(11,27,63,.28), inset 0 0 0 2px #E2E8F4; }
+#q { left: 110px; top: 826px; font-size: 80px; line-height: 104px; font-weight: 500; color: var(--ink); }
+#caret { position: absolute; left: 110px; top: 836px; width: 5px; height: 84px; background: var(--ink); border-radius: 3px; }
+#send { position: absolute; left: 890px; top: 990px; width: 116px; height: 116px; border-radius: 50%; background: var(--navy);
+  display: flex; align-items: center; justify-content: center; }
+#cursor { position: absolute; left: 0; top: 0; width: 56px; height: 80px; z-index: 5; }
+
+/* beat 2 */
+#h2a { left: 0; top: 700px; width: 1080px; text-align: center; font-size: 160px; line-height: 190px; font-weight: 700; letter-spacing: -0.04em; }
+#h2c { left: 0; top: 890px; width: 1080px; text-align: center; font-size: 200px; line-height: 230px; font-weight: 750; letter-spacing: -0.04em; }
+#h2b { left: 0; top: 1200px; width: 1080px; text-align: center; font-size: 58px; line-height: 76px; font-weight: 500; color: #C9D6F2; }
+
+/* beat 3: the real record, travelled top to bottom */
+#strip { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+.entry { position: absolute; left: 0; width: 1080px; height: 640px; }
+.entry .chk { position: absolute; left: 492px; top: 0; width: 96px; height: 96px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; }
+.entry .yr { position: absolute; left: 0; width: 1080px; text-align: center; top: 128px; font-size: 64px; line-height: 76px; font-weight: 600; color: var(--ink-soft); white-space: pre; }
+.entry .date { position: absolute; left: 0; width: 1080px; text-align: center; top: 196px; font-size: 220px; line-height: 236px; font-weight: 750; color: var(--navy); letter-spacing: -0.05em; white-space: pre; }
+.entry .where { position: absolute; left: 0; width: 1080px; text-align: center; top: 486px; font-size: 56px; line-height: 74px; font-weight: 650; color: var(--ink); white-space: pre; }
+.entry .what { position: absolute; left: 0; width: 1080px; text-align: center; top: 572px; font-size: 44px; line-height: 62px; font-weight: 500; color: var(--ink-soft); white-space: pre; }
+
+/* beat 4: credentials */
+.cred { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+.cred .n { position: absolute; left: 0; top: 760px; width: 1080px; text-align: center; font-size: 132px; line-height: 150px; font-weight: 750; letter-spacing: -0.04em; white-space: pre; }
+.cred .i { position: absolute; left: 0; top: 1110px; width: 1080px; text-align: center; font-size: 46px; line-height: 64px; font-weight: 500; color: #AFC2EA; white-space: pre; }
+
+/* beat 5 */
+#h5a { left: 0; top: 800px; width: 1080px; text-align: center; font-size: 92px; line-height: 120px; font-weight: 650; letter-spacing: -0.035em; }
+#h5b { left: 0; top: 940px; width: 1080px; text-align: center; font-size: 92px; line-height: 120px; font-weight: 650; letter-spacing: -0.035em; }
+
+/* beat 6: the real person */
+#portrait { position: absolute; left: 230px; top: 170px; width: 620px; height: 1166px;
+  background: url(./assets/poster.webp) no-repeat; background-size: 2862px 4045px; background-position: -298px 0;
+  -webkit-mask-image: radial-gradient(closest-side at 50% 42%, #000 62%, transparent 100%); mask-image: radial-gradient(closest-side at 50% 42%, #000 62%, transparent 100%); }
+#name { left: 0; top: 1250px; width: 1080px; text-align: center; font-size: 210px; line-height: 240px; font-weight: 750; letter-spacing: 0.06em; color: #FFFFFF;
+  text-shadow: 0 10px 50px rgba(5,22,64,.65); }
+#role { left: 0; top: 1520px; width: 1080px; text-align: center; font-size: 54px; line-height: 70px; font-weight: 550; color: #D5E0F7; }
+</style>
+</head>
+<body>
+<div id="main">
+  <svg width="0" height="0" style="position:absolute"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1 0"/></filter></svg>
+
+  <!-- BEAT 1  HOOK  0-87  a beginner hesitates at the input -->
+  <section id="s1" class="scene light"><div id="cam1" class="cam">
+    <div id="field"></div>
+    <div id="q" class="abs">AI, 저도 할 수
+있을까요?</div>
+    <div id="caret"></div>
+    <div id="send"><svg width="52" height="52" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <svg id="cursor" viewBox="0 0 28 40"><path d="M2 2 L2 31 L9.5 24.5 L14.5 36 L19.5 33.8 L14.6 22.6 L24.5 22.6 Z" fill="#0B1B3F" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+  </section>
+
+  <!-- BEAT 2  TURN  87-200  her answer -->
+  <section id="s2" class="scene dark" style="visibility:hidden"><div id="cam2" class="cam">
+    <div id="h2a" class="abs">‘나도 할 수</div>
+    <div id="h2c" class="abs">있다!’</div>
+    <div id="h2b" class="abs">그 경험을 만들어드립니다.</div>
+  </div><svg class="grain"><rect width="100%" height="100%" filter="url(#noise)"/></svg></section>
+
+  <!-- BEAT 3  PROOF (hero)  200-420  the 2026 record, camera travels down one stop per lecture -->
+  <section id="s3" class="scene light" style="visibility:hidden"><div id="cam3" class="cam"><div id="strip">
+    <div class="entry" id="e0" style="top:600px"><div class="chk" id="c0"><svg width="54" height="54" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="yr">2026</div><div class="date">06.16</div>
+      <div class="where">AI 강사 대상 Zoom 특강</div><div class="what">Google Vids 기초 · 영상 제작</div></div>
+    <div class="entry" id="e1" style="top:1900px"><div class="chk" id="c1"><svg width="54" height="54" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="yr">2026</div><div class="date">06.21</div>
+      <div class="where">포스코DX 후원 AI 영상 교육</div><div class="what">AI 이미지 · 영상 실습 코칭 (보조강사)</div></div>
+    <div class="entry" id="e2" style="top:3200px"><div class="chk" id="c2"><svg width="54" height="54" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="yr">2026</div><div class="date">07.12</div>
+      <div class="where">300명 대상 생성형 AI 특강</div><div class="what">한국AI콘텐츠연구소 주최</div></div>
+    <div class="entry" id="e3" style="top:4500px"><div class="chk" id="c3"><svg width="54" height="54" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="yr">2026</div><div class="date">08.26</div>
+      <div class="where">LG생활건강 전국 지점 250명</div><div class="what">온라인 Zoom 특강</div></div>
+    <div class="entry" id="e4" style="top:5800px"><div class="chk" id="c4"><svg width="54" height="54" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="yr">2026</div><div class="date">09.05</div>
+      <div class="where">부산디자인진흥원</div><div class="what">생성형 AI 초 · 중급 과정 (보조강사)</div></div>
+  </div></div></section>
+
+  <!-- BEAT 4  PROOF  420-492  credentials -->
+  <section id="s4" class="scene dark" style="visibility:hidden"><div id="cam4" class="cam">
+    <div class="cred" id="k0"><div class="n">AIBT 2급</div><div class="i">AI 비즈니스 활용능력
+한국능률협회인증원</div></div>
+    <div class="cred" id="k1"><div class="n">AI-POT 2급</div><div class="i">AI 콘텐츠 활용능력
+한국능률협회인증원</div></div>
+    <div class="cred" id="k2"><div class="n">생성형 AI
+활용 전문가</div><div class="i">과학기술정보통신부 등록 자격</div></div>
+    <div class="cred" id="k3"><div class="n" style="font-size:112px">Google Certified
+Educator</div><div class="i">Level 1 · 2</div></div>
+  </div><svg class="grain"><rect width="100%" height="100%" filter="url(#noise)"/></svg></section>
+
+  <!-- BEAT 5  PROOF  492-540  the root -->
+  <section id="s5" class="scene dark" style="visibility:hidden"><div id="cam5" class="cam">
+    <div id="h5a" class="abs">해운·물류 현장 26년의</div>
+    <div id="h5b" class="abs">실무 경험으로</div>
+  </div><svg class="grain"><rect width="100%" height="100%" filter="url(#noise)"/></svg></section>
+
+  <!-- BEAT 6  CTA  540-600  the person -->
+  <section id="s6" class="scene dark" style="visibility:hidden"><div id="cam6" class="cam">
+    <div id="portrait"></div>
+    <div id="name" class="abs">김희정</div>
+    <div id="role" class="abs">생성형 AI 실무 활용 전문 강사</div>
+  </div><svg class="grain"><rect width="100%" height="100%" filter="url(#noise)"/></svg></section>
+</div>
+
+<script src="./runtime/vendor/gsap.min.js"></script>
+<script src="./runtime/motion.js"></script>
+<script>
+const M = Motion.film({ fps: 30, duration: 20, width: 1080, height: 1920, clock: 'smooth' });
+const ACCENT = '#4F8CFF';
+
+/* BEAT 1  HOOK  0-87: hesitant typing in the learner's own input, cursor parks, press, cut before release */
+M.drift('#cam1', { prop: 'scale', from: 1.0, to: 1.07, start: 0, end: 88 });
+M.type('#q', { at: 4, caret: '#caret', caretGap: 4,   // hesitant: pauses after 저도 and before the second line
+  events: [[0,1],[3,2],[6,3],[12,4],[16,5],[20,6],[28,7],[32,8],[38,9],[42,10],[44,11],[52,12],[56,13],[60,14],[64,15],[70,'all']] });
+M.cursor('#cursor', { keys: [[52, 1260, 1560, 3.2, -24], [62, 1100, 1300, 1.9, -12], [74, 952, 1052, 1, 0]], ease: 'glide' });
+M.press('#cursor', '#send', { at: 82, cursorDepth: .82, targetDepth: .86, lag: 1, frames: 3, release: false, targetStep: { backgroundColor: ACCENT } });
+
+/* BEAT 2  TURN  87-200: her answer, words at speech rhythm; the thesis line lands last and bigger */
+M.cut(87, { hide: ['#s1'], show: ['#s2'], label: 'send -> answer' });
+M.camera('#cam2', [[87, { scale: 1.06 }], [200, { scale: 1 }]], { origin: '50% 48%', ease: 'glide' });
+M.words('#h2a', { at: 89, mech: 'rise', dist: 90, gaps: [6, 5], frames: 13, ease: 'softLand', smear: true, fixedSlots: false });
+M.words('#h2c', { at: 107, mech: 'rise', dist: 150, frames: 14, ease: 'softLand', smear: true,
+  accent: { color: ACCENT, frames: 30, word: -1 }, words: [{ scale: 1.18 }] });
+M.words('#h2b', { at: 134, mech: 'rise', dist: 40, gaps: [5, 6], frames: 12, ease: 'softLand' });
+
+/* BEAT 3  PROOF  200-420: the camera travels down the real record; one entry lit per stop */
+const STOP = 1300, T0 = 200, SEG = 44;
+const ys = [[T0, 360], [T0 + 12, 0, 'softLand']];
+for (let i = 0; i < 5; i++) {
+  const a = T0 + i * SEG;
+  if (i > 0) ys.push([a + 12, -i * STOP, 'whip']);
+  ys.push([a + SEG, -i * STOP - 50, 'cruise']);
+}
+M.cut(T0, { hide: ['#s2'], show: ['#s3'], label: 'answer -> record' });
+M.kf('#strip', 'y', ys);
+for (let i = 0; i < 5; i++) M.enter('#c' + i, { at: T0 + i * SEG + (i ? 9 : 8), frames: 9, ease: 'snapSettle', from: { scale: 2.4, blur: 6 } });
+M.drift('#cam3', { prop: 'scale', from: 1, to: 1.04, start: T0, end: 420 });
+
+/* BEAT 4  PROOF  420-492: credentials, one per cut, arriving from oversize */
+M.cut(420, { hide: ['#s3'], show: ['#s4'], label: 'record -> credentials' });
+M.drift('#cam4', { prop: 'scale', from: 1, to: 1.05, start: 420, end: 492 });
+for (let i = 0; i < 4; i++) {
+  const a = 420 + i * 18;
+  M.enter('#k' + i, { at: a, frames: 8, ease: 'softLand', from: { scale: 1.45, blur: 8 } });
+  if (i < 3) M.hide('#k' + i, a + 18);
+}
+
+/* BEAT 5  PROOF  492-540: the root of the teaching */
+M.cut(492, { hide: ['#s4'], show: ['#s5'], label: 'credentials -> 26 years' });
+M.words('#h5a', { at: 493, mech: 'rise', dist: 60, gaps: [5, 5, 6], frames: 12, ease: 'softLand', fixedSlots: false });
+M.words('#h5b', { at: 512, mech: 'rise', dist: 60, gaps: [6], frames: 12, ease: 'softLand', fixedSlots: false });
+M.drift('#cam5', { prop: 'scale', from: 1.04, to: 1, start: 492, end: 540 });
+
+/* BEAT 6  CTA  540-600: the person; name decelerates from oversize, then everything keeps settling smaller */
+M.cut(540, { hide: ['#s5'], show: ['#s6'], label: '26 years -> name' });
+M.snap('#portrait', { at: 540, from: { scale: 1.12, y: 30 }, to: { scale: 1, y: 0 }, tail: 18, origin: '50% 40%' });
+M.enter('#name', { at: 546, frames: 16, ease: 'snapSettle', from: { scale: 3.5, blur: 14 } });
+M.words('#role', { at: 560, mech: 'rise', dist: 30, gaps: [4, 4, 5], frames: 12 });
+M.drift('#cam6', { prop: 'scale', from: 1, to: .955, start: 556, end: 600 });
+
+window.__ready = Motion.loaded().then(() => { if (/selftest/.test(location.search)) Motion.selfTest(M, { samples: 24 }); });
+
+/* Browser preview only: open index.html?play to watch it loop in real time (render.mjs never passes ?play). */
+if (/[?&]play/.test(location.search)) window.__ready.then(() => {
+  document.body.classList.add('play');
+  const fit = () => { document.getElementById('main').style.zoom = Math.min(innerWidth / 1080, innerHeight / 1920); };
+  addEventListener('resize', fit); fit();
+  const t0 = performance.now();
+  const tick = (now) => { window.__seek(((now - t0) / 1000) % window.__duration); requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+});
+</script>
+</body>
+</html>
