@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["-e", "require('http').createServer((q,r)=>{r.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});r.end(require('fs').readFileSync('shopping-list.html'))}).listen(5173)"],
       "port": 5173
+    },
+    {
+      "name": "shopping-list-v2",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "require('http').createServer((q,r)=>{r.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});r.end(require('fs').readFileSync('shopping-list/index.html'))}).listen(5174)"],
+      "port": 5174
     }
   ]
 }
