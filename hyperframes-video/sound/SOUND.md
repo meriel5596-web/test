@@ -40,7 +40,7 @@ Scene starts were moved by ~0.13 s (career 3.6–7.467, shift 7.467–11.267, ct
 | 5 | 7.240 | push in clears scene 2 | transition/fs-786514-swoosh-v2.ogg | -11 dB | +8.6 dB |
 | 6 | 8.530 | 내 일에 바로 쓰는 AI로! pops in | pop/fs-824189-pop-in-sfx.ogg | -4 dB | +5.3 dB |
 | 7 | 11.297 | bar opens into the button | kit/click.ogg | -4 dB | +3.8 dB |
-| 8 | 12.197 | name 김희정 complete | ding/kenney-interface-confirmation-001.ogg | -13 dB | +6.8 dB |
+| 8 | 12.197 | name complete, '문의는 DM 주세요' lands | ding/kenney-interface-confirmation-001.ogg | -13 dB | +6.8 dB |
 
 Each sound is placed so its peak lands one frame after its picture. "Over the bed" = 33 ms RMS at the hit vs. 0.3–0.6 s before it.
 

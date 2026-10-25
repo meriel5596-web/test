@@ -14,17 +14,18 @@
     }
     #cta-photo {
       position: absolute;
-      left: 382px;
+      left: 410px;
       top: 300px;
-      width: 316px;
-      height: 560px;
+      width: 260px;
+      height: 460px;
       border-radius: 28px;
       overflow: hidden;
     }
     #cta-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 30%; }
     .cta-line { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.1; }
-    #cta-role { top: 900px; font-size: 60px; font-weight: 700; color: var(--accent, #5aa9ff); }
-    #cta-name { top: 975px; font-size: 140px; font-weight: 900; letter-spacing: 0.04em; }
+    #cta-role { top: 795px; font-size: 60px; font-weight: 700; color: var(--accent, #5aa9ff); }
+    #cta-name { top: 860px; font-size: 140px; font-weight: 900; letter-spacing: 0.04em; }
+    #cta-offer { top: 1055px; font-size: 54px; font-weight: 700; }
     .cta-l { display: inline-block; }
     /* the pill opens out of the bar left by the previous scene */
     #cta-pill {
@@ -39,13 +40,14 @@
       align-items: center;
       justify-content: center;
     }
-    #cta-ask { font-size: 50px; font-weight: 800; color: var(--ground, #0b2a6b); white-space: nowrap; }
+    #cta-ask { font-size: 58px; font-weight: 900; color: var(--ground, #0b2a6b); white-space: nowrap; }
   </style>
   <div id="root" data-composition-id="cta" data-width="1080" data-height="1920">
     <div id="cta-photo"><img id="cta-img" src="assets/images/portrait.png" alt="김희정 강사" /></div>
     <div id="cta-role" class="cta-line">AI 강사</div>
     <div id="cta-name" class="cta-line"><span class="cta-l">김</span><span class="cta-l">희</span><span class="cta-l">정</span></div>
-    <div id="cta-pill"><span id="cta-ask">기업·기관 맞춤형 AI 교육 문의</span></div>
+    <div id="cta-offer" class="cta-line">기업·기관 맞춤형 AI 교육 문의</div>
+    <div id="cta-pill"><span id="cta-ask">문의는 DM 주세요</span></div>
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
@@ -53,14 +55,16 @@
     tl.fromTo("#cta-pill",
       { clipPath: "inset(47px 170px 47px 170px round 8px)" },
       { clipPath: "inset(0px 0px 0px 0px round 55px)", duration: 0.5, ease: "power3.out" }, 0);
-    tl.fromTo("#cta-ask", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.4);
+    tl.fromTo("#cta-ask", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.95);
     // mask reveal of the photo from the bottom, with a settling push in on the picture
     tl.fromTo("#cta-photo", { clipPath: "inset(100% 0% 0% 0% round 28px)" }, { clipPath: "inset(0% 0% 0% 0% round 28px)", duration: 0.7, ease: "expo.out" }, 0.1);
     tl.fromTo("#cta-img", { scale: 1.15 }, { scale: 1, duration: 1.2, ease: "power3.out" }, 0.1);
     // the role, then the name letter by letter
     tl.fromTo("#cta-role", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.35);
     tl.fromTo(".cta-l", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25, ease: "power3.out", stagger: 0.1 }, 0.45);
-    // everything has landed by ~0.95 s and holds still to the end (the last line holds > 2.5 s)
+    // the offer line, then the DM ask lands last inside the button
+    tl.fromTo("#cta-offer", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.8);
+    // everything has landed by ~1.15 s and holds still to the end (the last line holds > 2.4 s)
     window.__timelines["cta"] = tl;
   </script>
 </template>

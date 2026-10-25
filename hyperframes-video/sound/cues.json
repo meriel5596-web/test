@@ -17,6 +17,6 @@
     { "t": 7.38,  "start": 7.24,   "type": "movement", "file": "transition/fs-786514-swoosh-v2.ogg",        "gain_db": -11, "desc": "push in clears scene 2 (cut on the beat at 7.467)" },
     { "t": 8.557, "start": 8.53,   "type": "appear",   "file": "pop/fs-824189-pop-in-sfx.ogg",              "gain_db": -4, "desc": "'내 일에 바로 쓰는 AI로!' starts popping in (on the beat)" },
     { "t": 11.267,"start": 11.297, "type": "click",    "file": "kit/click.ogg",                             "gain_db": -4, "desc": "bar opens into the CTA button (match cut, on the beat)" },
-    { "t": 12.167,"start": 12.197, "type": "success",  "file": "ding/kenney-interface-confirmation-001.ogg", "gain_db": -13, "desc": "name 김희정 complete" }
+    { "t": 12.167,"start": 12.197, "type": "success",  "file": "ding/kenney-interface-confirmation-001.ogg", "gain_db": -13, "desc": "name complete, DM ask lands in the button (12.217)" }
   ]
 }
