@@ -1,0 +1,62 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Pretendard";
+      src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+      font-weight: 45 920;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      font-family: "Pretendard", sans-serif;
+      color: var(--ink, #fff);
+      letter-spacing: -0.04em;
+    }
+    .shift-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      line-height: 1.12;
+      white-space: nowrap;
+    }
+    #shift-from { top: 430px; font-size: 92px; font-weight: 700; }
+    .shift-big { font-size: 160px; font-weight: 900; }
+    #shift-a { top: 640px; }
+    #shift-b { top: 830px; color: var(--accent, #5aa9ff); }
+    #shift-c { top: 1020px; }
+    .shift-w, .shift-l { display: inline-block; }
+    /* same box and place as the CTA pill's closed state: the match cut into the last scene */
+    #shift-bar {
+      position: absolute;
+      left: 260px;
+      top: 1237px;
+      width: 560px;
+      height: 16px;
+      border-radius: 8px;
+      background: var(--accent, #5aa9ff);
+      transform-origin: 50% 50%;
+    }
+  </style>
+  <div id="root" data-composition-id="shift" data-width="1080" data-height="1920">
+    <div id="shift-from" class="shift-line">
+      <span class="shift-w">배우는</span> <span class="shift-w">AI를</span> <span class="shift-w">넘어,</span>
+    </div>
+    <div id="shift-a" class="shift-line shift-big"><span class="shift-l">내</span> <span class="shift-l">일</span><span class="shift-l">에</span></div>
+    <div id="shift-b" class="shift-line shift-big"><span class="shift-l">바</span><span class="shift-l">로</span> <span class="shift-l">쓰</span><span class="shift-l">는</span></div>
+    <div id="shift-c" class="shift-line shift-big"><span class="shift-l">A</span><span class="shift-l">I</span><span class="shift-l">로</span><span class="shift-l">!</span></div>
+    <div id="shift-bar"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // the setup line arrives word by word
+    tl.fromTo("#shift-from .shift-w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out", stagger: 0.08 }, 0.05);
+    // kinetic type: the payoff pops in letter by letter with a small overshoot
+    tl.fromTo(".shift-l", { opacity: 0, y: 70, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)", stagger: 0.035 }, 1.0);
+    // the bar that becomes the CTA button
+    tl.fromTo("#shift-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "expo.out" }, 1.75);
+    // hold, then the words clear; the bar stays for the cut
+    tl.to(["#shift-from", "#shift-a", "#shift-b", "#shift-c"], { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", stagger: 0.04 }, 3.45);
+    window.__timelines["shift"] = tl;
+  </script>
+</template>

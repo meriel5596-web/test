@@ -1,0 +1,48 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Pretendard";
+      src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+      font-weight: 45 920;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      font-family: "Pretendard", sans-serif;
+      color: var(--ink, #fff);
+      letter-spacing: -0.04em;
+    }
+    .hook-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-weight: 900;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    #hook-ai { top: 470px; font-size: 240px; }
+    #hook-hard { top: 770px; font-size: 180px; color: var(--accent, #5aa9ff); }
+    #hook-rest { top: 1000px; font-size: 128px; }
+    .hook-w { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1920">
+    <div id="hook-ai" class="hook-line"><span class="hook-w">AI,</span></div>
+    <div id="hook-hard" class="hook-line"><span class="hook-w">어렵게</span></div>
+    <div id="hook-rest" class="hook-line"><span class="hook-w">배우지</span> <span class="hook-w">마세요!</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // frame 0 is the thumbnail: "AI," is already on screen
+    tl.fromTo("#hook-hard .hook-w",
+      { opacity: 0, filter: "blur(10px)", scale: 1.14 },
+      { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.45, ease: "expo.out" }, 0.25);
+    tl.fromTo("#hook-rest .hook-w",
+      { opacity: 0, filter: "blur(6px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out", stagger: 0.09 }, 0.5);
+    // hold ~2.5 s, then blur swap out (accelerating), line by line
+    tl.to(["#hook-ai", "#hook-hard", "#hook-rest"],
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", stagger: 0.05 }, 3.25);
+    window.__timelines["hook"] = tl;
+  </script>
+</template>

@@ -1,0 +1,64 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Pretendard";
+      src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+      font-weight: 45 920;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      font-family: "Pretendard", sans-serif;
+      color: var(--ink, #fff);
+      letter-spacing: -0.04em;
+    }
+    #career-stage { position: absolute; inset: 0; transform-origin: 50% 45%; }
+    .career-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    /* mask: the number rises out of its own line box */
+    #career-years { top: 380px; height: 430px; overflow: hidden; font-size: 380px; font-weight: 900; line-height: 1.12; }
+    #career-years-in { display: inline-block; }
+    #career-sub { top: 850px; font-size: 76px; font-weight: 700; }
+    #career-true { top: 975px; font-size: 150px; font-weight: 900; color: var(--accent, #5aa9ff); }
+    #career-bar {
+      position: absolute;
+      left: 190px;
+      top: 1162px;
+      width: 700px;
+      height: 14px;
+      border-radius: 7px;
+      background: var(--accent, #5aa9ff);
+      transform-origin: 0 50%;
+    }
+    .career-w { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="career" data-width="1080" data-height="1920">
+    <div id="career-stage">
+      <div id="career-years" class="career-line"><span id="career-years-in">26년</span></div>
+      <div id="career-sub" class="career-line">
+        <span class="career-w">실무</span> <span class="career-w">경험으로</span> <span class="career-w">완성한</span>
+      </div>
+      <div id="career-true" class="career-line">진짜 AI 교육</div>
+      <div id="career-bar"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // mask reveal: "26년" rises out of its line
+    tl.fromTo("#career-years-in", { yPercent: 105 }, { yPercent: 0, duration: 0.75, ease: "expo.out" }, 0.05);
+    // the sub line comes up from dim to full, word by word (overlaps the number's landing)
+    tl.fromTo("#career-sub .career-w", { opacity: 0.15 }, { opacity: 1, duration: 0.3, ease: "power2.out", stagger: 0.1 }, 0.45);
+    // the claim blurs in as one line, then the bar draws under it
+    tl.fromTo("#career-true", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.95);
+    tl.fromTo("#career-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 1.1);
+    // hold ~2 s, then push in: the stage accelerates toward the camera and clears
+    tl.to("#career-stage", { scale: 1.14, opacity: 0, filter: "blur(6px)", duration: 0.32, ease: "power3.in" }, 3.6);
+    window.__timelines["career"] = tl;
+  </script>
+</template>
