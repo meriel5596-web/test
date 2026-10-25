@@ -1,0 +1,22 @@
+{
+  "video": "renders/kimheejung-reel.mp4 (15 s, 30 fps)",
+  "music": {
+    "file": "sound-effects-cache/music-834.mp3",
+    "title": "It's Love",
+    "artist": "Michael Ramir C.",
+    "source": "https://mixkit.co (Mixkit #834, https://assets.mixkit.co/music/834/834.mp3)",
+    "license": "Mixkit Stock Music Free License",
+    "offset": 35.65,
+    "note": "first kick of the loud section (39.30 s in the track) lands on the 26년 reveal at 3.65 s; kick every 0.544 s (~110 BPM)"
+  },
+  "cues": [
+    { "t": 0.25,  "start": 0.28,   "type": "appear",   "file": "kit/pop.ogg",                               "gain_db": -6, "desc": "'어렵게' pops in" },
+    { "t": 3.65,  "start": 1.70,   "type": "build_up", "file": "kit/riser.ogg",                             "gain_db": -9, "desc": "riser under the hook, peaks on the 26년 reveal" },
+    { "t": 3.5,   "start": 3.40,   "type": "scene_cut","file": "kit/whoosh.ogg",                            "gain_db": -4, "desc": "hook blurs out, cut to 26년" },
+    { "t": 3.65,  "start": 3.625,  "type": "reveal",   "file": "kit/impact.ogg",                            "gain_db": 2,  "desc": "26년 rises out of its mask (on the beat)" },
+    { "t": 7.38,  "start": 7.24,   "type": "movement", "file": "transition/fs-786514-swoosh-v2.ogg",        "gain_db": -11, "desc": "push in clears scene 2 (cut on the beat at 7.467)" },
+    { "t": 8.557, "start": 8.53,   "type": "appear",   "file": "pop/fs-824189-pop-in-sfx.ogg",              "gain_db": -4, "desc": "'내 일에 바로 쓰는 AI로!' starts popping in (on the beat)" },
+    { "t": 11.267,"start": 11.297, "type": "click",    "file": "kit/click.ogg",                             "gain_db": -4, "desc": "bar opens into the CTA button (match cut, on the beat)" },
+    { "t": 12.167,"start": 12.197, "type": "success",  "file": "ding/kenney-interface-confirmation-001.ogg", "gain_db": -13, "desc": "name 김희정 complete" }
+  ]
+}

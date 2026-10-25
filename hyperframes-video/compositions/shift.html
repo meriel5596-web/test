@@ -52,11 +52,11 @@
     // the setup line arrives word by word
     tl.fromTo("#shift-from .shift-w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out", stagger: 0.08 }, 0.05);
     // kinetic type: the payoff pops in letter by letter with a small overshoot
-    tl.fromTo(".shift-l", { opacity: 0, y: 70, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)", stagger: 0.035 }, 1.0);
+    tl.fromTo(".shift-l", { opacity: 0, y: 70, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)", stagger: 0.035 }, 1.09);
     // the bar that becomes the CTA button
     tl.fromTo("#shift-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "expo.out" }, 1.75);
     // hold, then the words clear; the bar stays for the cut
-    tl.to(["#shift-from", "#shift-a", "#shift-b", "#shift-c"], { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", stagger: 0.04 }, 3.45);
+    tl.to(["#shift-from", "#shift-a", "#shift-b", "#shift-c"], { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", stagger: 0.03 }, 3.5);
     window.__timelines["shift"] = tl;
   </script>
 </template>
