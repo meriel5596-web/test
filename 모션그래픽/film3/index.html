@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>11월 원데이 클래스</title>
+<meta name="viewport" content="width=1080, height=1920">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  body.play { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  #main { position: relative; width: 1080px; height: 1920px; flex: none; }
+  canvas { display: block; width: 1080px; height: 1920px; }
+</style>
+</head>
+<body>
+<div id="main" data-composition-id="main" data-width="1080" data-height="1920" data-duration="5">
+  <canvas id="cv" width="1080" height="1920"></canvas>
+</div>
+<script>
+/* 9:16, 5 s, 60 fps. Every pixel is a pure function of t inside seek(t): no timers, no state between frames.
+   "11월 원데이 클래스" pops in one letter at a time (spring scale + ring burst), waves once, holds. */
+const W = 1080, H = 1920, DUR = 5;
+const C = { paper: '#FFF3E4', ink: '#2A1A14', persimmon: '#E8542A', mustard: '#F2B33D', soft: '#EBD9C2' };
+const FONT = '"Pretendard Variable","Pretendard","Malgun Gothic",sans-serif';
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = u => 1 - Math.pow(1 - u, 3);
+/* closed-form underdamped spring step response: 0 -> 1 with overshoot */
+function spring(t, z = .42, w = 22) {
+  if (t <= 0) return 0;
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+}
+const font = (size, weight) => `${weight} ${size}px ${FONT}`;
+
+/* ---------- layout (measured once fonts are loaded) ---------- */
+const LINES = [
+  { str: '11월', size: 300, weight: 900, base: 800, color: C.persimmon },
+  { str: '원데이', size: 240, weight: 900, base: 1100, color: C.ink },
+  { str: '클래스', size: 240, weight: 900, base: 1370, color: C.ink },
+];
+const START = 0.3, STEP = 0.17;                     // letter i pops at START + i*STEP (last of 9 at 1.66 s)
+const WAVE = 3.0, WAVE_STEP = 0.06;                 // one hop through all letters
+const TILT = [-14, 10, -8, 12, -10, 7, -12, 9, -6]; // fixed entry tilts (deg), no Math.random
+let G = [];
+function buildLayout() {
+  G = [];
+  for (const L of LINES) {
+    ctx.font = font(L.size, L.weight);
+    const chars = [...L.str], ws = chars.map(c => ctx.measureText(c).width);
+    const track = L.size * -0.02;
+    let x = W / 2 - (ws.reduce((a, b) => a + b, 0) + track * (chars.length - 1)) / 2;
+    chars.forEach((c, i) => { G.push({ c, x: x + ws[i] / 2, y: L.base, size: L.size, weight: L.weight, color: L.color, w: ws[i] }); x += ws[i] + track; });
+  }
+}
+
+function glyph(g, dy, rot, sc) {
+  if (sc <= 0.002) return;
+  const cy = g.y - g.size * .36;                      // pivot at the optical centre of the letter
+  ctx.save(); ctx.translate(g.x, cy + dy); ctx.rotate(rot); ctx.scale(sc, sc);
+  ctx.font = font(g.size, g.weight); ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = g.color; ctx.fillText(g.c, 0, g.size * .36); ctx.restore();
+}
+
+function ring(x, y, u, r0, r1, color) {
+  if (u <= 0 || u >= 1) return;
+  const r = r0 + (r1 - r0) * eOut(u);
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.lineWidth = 26 * (1 - u); ctx.strokeStyle = color; ctx.stroke();
+}
+function sparks(x, y, u, R, color, seed) {
+  if (u <= 0 || u >= 1) return;
+  for (let k = 0; k < 6; k++) {
+    const a = seed + k * Math.PI / 3, d = R * eOut(u), r = 11 * (1 - u);
+    ctx.beginPath(); ctx.arc(x + Math.cos(a) * d, y + Math.sin(a) * d, r, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+  }
+}
+
+function drawBackdrop(t) {
+  ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+  // a soft blob grows behind "11월" as the first letter lands
+  const u = spring(t - START, .6, 9);
+  if (u > 0) { ctx.beginPath(); ctx.arc(W / 2, 690, 275 * u, 0, Math.PI * 2); ctx.fillStyle = C.soft; ctx.fill(); }
+}
+
+function drawLetters(t) {
+  G.forEach((g, i) => {
+    const t0 = START + i * STEP, tau = t - t0;
+    if (tau < 0) return;
+    const cy = g.y - g.size * .36;
+    const col = i % 2 ? C.mustard : C.persimmon;
+    ring(g.x, cy, seg(tau, 0, .45), g.size * .2, g.size * .78, col);
+    sparks(g.x, cy, seg(tau, .03, .5), g.size * .85, col, i * .7);
+
+    const s = spring(tau);
+    const hop = Math.sin(Math.PI * seg(t, WAVE + i * WAVE_STEP, WAVE + i * WAVE_STEP + .32));
+    const dy = (1 - s) * 140 - hop * 46;
+    const rot = (1 - s) * TILT[i] * Math.PI / 180 + hop * TILT[i] * .25 * Math.PI / 180;
+    glyph(g, dy, rot, s * (1 + hop * .06));
+  });
+}
+
+function drawUnderline(t) {
+  // a persimmon bar slides under 클래스 after the last letter lands
+  const u = eOut(seg(t, 2.0, 2.45));
+  if (u <= 0) return;
+  const w = 560 * u, y = 1440;
+  ctx.beginPath(); ctx.roundRect(W / 2 - 280, y, w, 22, 11); ctx.fillStyle = C.persimmon; ctx.fill();
+}
+
+function seek(t) {
+  t = clamp(t, 0, DUR);
+  drawBackdrop(t);
+  drawUnderline(t);
+  drawLetters(t);
+}
+
+window.__duration = DUR;
+window.__seek = seek;
+window.__ready = (async () => {
+  await document.fonts.load(font(100, 900));
+  await document.fonts.ready;
+  buildLayout(); seek(0);
+})();
+
+/* browser preview only: index.html?play loops in real time */
+if (/[?&]play/.test(location.search)) window.__ready.then(() => {
+  document.body.classList.add('play');
+  const fit = () => { document.getElementById('main').style.zoom = Math.min(innerWidth / 1080, innerHeight / 1920); };
+  addEventListener('resize', fit); fit();
+  const t0 = performance.now();
+  const tick = now => { seek(((now - t0) / 1000) % DUR); requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+});
+</script>
+</body>
+</html>
