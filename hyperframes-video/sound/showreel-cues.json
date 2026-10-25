@@ -1,0 +1,30 @@
+{
+  "video": "showreel (15 s, 30 fps)",
+  "music": {
+    "file": "sound-effects-cache/music-130.mp3",
+    "title": "Tech House vibes",
+    "artist": "Alejandro Magaña (A. M.)",
+    "source": "https://mixkit.co (Mixkit #130, https://assets.mixkit.co/music/130/130.mp3)",
+    "license": "Mixkit Stock Music Free License",
+    "offset": 12.35,
+    "gain_db": -13,
+    "fade_out": 1.24,
+    "note": "kicks at 2.52 + n x 0.4913 s in the track (122 BPM); from 12.35 a bar starts at 0, 3.93, 7.86, 11.79 in the video; fade from the bar at 13.76"
+  },
+  "cues": [
+    { "t": 0.491, "start": 0.503, "type": "reveal", "file": "impact/kenney-impact-impactpunch-heavy-000.ogg", "gain_db": -10, "desc": "'어렵게' slams in" },
+    { "t": 0.983, "start": 0.995, "type": "movement", "file": "whoosh/fs-683101-quick-woosh.ogg", "gain_db": -1, "desc": "'배우지' whips in from the left" },
+    { "t": 1.474, "start": 1.41, "type": "movement", "file": "whoosh/fs830856.ogg", "gain_db": -9, "desc": "'마세요!' whips in from the right" },
+    { "t": 1.965, "start": 1.894, "type": "movement", "file": "transition/fs-702773-swipe-wav.ogg", "gain_db": -10, "desc": "strike through '어렵게'" },
+    { "t": 3.933, "start": 1.985, "type": "build_up", "file": "kit/riser.ogg", "gain_db": -10, "desc": "riser peaks as the blue flood fills the frame" },
+    { "t": 3.933, "start": 3.908, "type": "reveal", "file": "kit/impact.ogg", "gain_db": 2, "desc": "blue flood lands, cut to the count (bar line)" },
+    { "t": 4.89, "start": 4.865, "type": "appear", "file": "pop/fs-824189-pop-in-sfx.ogg", "gain_db": -2, "desc": "26 lands, '년' pops" },
+    { "t": 5.407, "start": 5.437, "type": "click", "file": "click/kenney-interface-select-001.ogg", "gain_db": -6, "desc": "black pill wipes open: '진짜 AI 교육'" },
+    { "t": 7.8, "start": 7.69, "type": "scene_cut", "file": "transition/fs-786514-swoosh-v2.ogg", "gain_db": -18, "desc": "whip pan up into scene 3 (bar line 7.867)" },
+    { "t": 8.85, "start": 8.88, "type": "appear", "file": "kit/pop.ogg", "gain_db": 6, "desc": "'내 일에 바로 쓰는 AI로!' slams in" },
+    { "t": 9.095, "start": 9.125, "type": "hover_or_small_ui", "file": "click/kenney-interface-click-001.ogg", "gain_db": 8, "desc": "four course chips snap in" },
+    { "t": 11.75, "start": 11.65, "type": "scene_cut", "file": "whoosh/fs-127197-fast-simple-chop-5-aif.ogg", "gain_db": -6, "desc": "zoom through into the end card" },
+    { "t": 11.8, "start": 11.83, "type": "reveal", "file": "impact/kenney-impact-impactsoft-heavy-000.ogg", "gain_db": -4, "desc": "iris opens on the photo (bar line)" },
+    { "t": 12.291, "start": 12.32, "type": "success", "file": "ding/kenney-interface-confirmation-002.ogg", "gain_db": -10, "desc": "'문의는 DM 주세요' pops" }
+  ]
+}

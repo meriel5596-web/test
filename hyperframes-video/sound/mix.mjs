@@ -1,5 +1,5 @@
 // mix.mjs - put the music and the cue list's sound effects under a silent render, then normalise.
-// Usage: node sound/mix.mjs <silent.mp4> <out.mp4>
+// Usage: node sound/mix.mjs <silent.mp4> <out.mp4> [cues.json]   (default cues: sound/cues.json)
 // Every sound is a real recorded file (no synthesis). Music is Mixkit (downloaded at runtime into
 // sound-effects-cache/, never committed); effects are the sound-effects skill's bundled CC0 files.
 // Loudness: measured, one fixed gain to -16 LUFS, then a peak limiter at -5 dBFS, measured again on the MP4 by the caller.
@@ -7,12 +7,12 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const [silent, out] = process.argv.slice(2);
+const [silent, out, cuesArg] = process.argv.slice(2);
 if (!silent || !out) { console.error('usage: node sound/mix.mjs <silent.mp4> <out.mp4>'); process.exit(1); }
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const SFX = path.resolve(ROOT, '../.agents/skills/sound-effects/sfx');
-const cues = JSON.parse(fs.readFileSync(path.join(ROOT, 'sound/cues.json'), 'utf8'));
-const DUR = 15, MUSIC_DB = -13, FADE_OUT = 1.4;
+const cues = JSON.parse(fs.readFileSync(cuesArg ? path.resolve(cuesArg) : path.join(ROOT, 'sound/cues.json'), 'utf8'));
+const DUR = 15, MUSIC_DB = cues.music.gain_db ?? -13, FADE_OUT = cues.music.fade_out ?? 1.4;
 
 const inputs = ['-i', silent, '-ss', String(cues.music.offset), '-t', String(DUR), '-i', path.join(ROOT, cues.music.file)];
 const chains = [`[1:a]aformat=sample_rates=48000:channel_layouts=stereo,volume=${MUSIC_DB}dB,` +
@@ -36,9 +36,17 @@ const p1 = ff([...inputs, '-filter_complex', `${mix},loudnorm=I=-16:TP=-4.5:LRA=
 const m = JSON.parse(p1.slice(p1.lastIndexOf('{'), p1.lastIndexOf('}') + 1));
 console.log(`raw mix: ${m.input_i} LUFS, true peak ${m.input_tp} dBTP`);
 // pass 2: one fixed gain to -16 LUFS (keeps the cue-vs-bed balance exactly as set), then a 4x-oversampled
-// peak limiter at -5 dBFS so the true peak stays under -4 dBTP; keep the picture untouched
-const gain = (-16 + 0.9 - Number(m.input_i)).toFixed(2);   // +0.9: what the limiter takes back on this mix (measured)
+// peak limiter at -5 dBFS so the true peak stays under -4 dBTP; keep the picture untouched.
+// The limiter takes some loudness back, so measure the MP4 and correct the gain (at most 3 tries).
 const lim = `aresample=192000,alimiter=limit=${Math.pow(10, -5 / 20).toFixed(4)}:attack=1:release=60:level=disabled,aresample=48000`;
-ff(['-y', ...inputs, '-filter_complex', `${mix},volume=${gain}dB,${lim}[a]`, '-map', '0:v', '-map', '[a]',
-  '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', out]);
+let gain = -16 - Number(m.input_i);
+for (let k = 0; k < 3; k++) {
+  ff(['-y', ...inputs, '-filter_complex', `${mix},volume=${gain.toFixed(2)}dB,${lim}[a]`, '-map', '0:v', '-map', '[a]',
+    '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', out]);
+  const e = ff(['-i', out, '-af', 'ebur128=peak=true', '-f', 'null', '-']);
+  const I = Number(/I:\s+(-?[\d.]+) LUFS/.exec(e.slice(e.lastIndexOf('Summary')))[1]);
+  console.log(`try ${k + 1}: gain ${gain.toFixed(2)} dB -> ${I} LUFS`);
+  if (Math.abs(I + 16) <= 0.3) break;
+  gain += -16 - I;
+}
 console.log('wrote', out);

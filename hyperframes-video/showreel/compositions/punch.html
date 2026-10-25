@@ -1,0 +1,47 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Pretendard";
+      src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+      font-weight: 45 920;
+    }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; background: var(--ground, #0a0a0f); overflow: hidden; }
+    #punch-stage { position: absolute; inset: 0; transform-origin: 540px 1000px; }
+    .punch-line { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; }
+    #punch-from { top: 360px; font-size: 84px; font-weight: 700; }
+    .punch-big { font-size: 165px; font-weight: 900; }
+    #punch-a { top: 520px; }
+    #punch-b { top: 715px; color: var(--accent, #2f6bff); }
+    #punch-c { top: 910px; }
+    .punch-l { display: inline-block; }
+    #punch-chips { position: absolute; left: 0; right: 0; top: 1140px; display: grid; grid-template-columns: 430px 430px; gap: 16px 20px; justify-content: center; }
+    .punch-chip { height: 74px; border-radius: 37px; border: 3px solid var(--accent, #2f6bff); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; white-space: nowrap; letter-spacing: -0.03em; }
+  </style>
+  <div id="root" data-composition-id="punch" data-width="1080" data-height="1920">
+    <div id="punch-stage">
+      <div id="punch-from" class="punch-line">배우는 AI를 넘어,</div>
+      <div id="punch-a" class="punch-line punch-big"><span class="punch-l">내</span> <span class="punch-l">일</span><span class="punch-l">에</span></div>
+      <div id="punch-b" class="punch-line punch-big"><span class="punch-l">바</span><span class="punch-l">로</span> <span class="punch-l">쓰</span><span class="punch-l">는</span></div>
+      <div id="punch-c" class="punch-line punch-big"><span class="punch-l">A</span><span class="punch-l">I</span><span class="punch-l">로</span><span class="punch-l">!</span></div>
+      <div id="punch-chips">
+        <div class="punch-chip">ChatGPT 실무 활용</div>
+        <div class="punch-chip">AI 콘텐츠 제작</div>
+        <div class="punch-chip">업무 생산성 &amp; 자동화</div>
+        <div class="punch-chip">AI 입문 &amp; 디지털 활용</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const B = 0.4913;
+    const tl = gsap.timeline({ paused: true });
+    // the whip from the last scene lands: the setup line arrives from below, blurred, and sharpens
+    tl.fromTo("#punch-from", { y: 700, filter: "blur(16px)" }, { y: 0, filter: "blur(0px)", duration: 0.4, ease: "expo.out" }, 0);
+    // beat 2: the payoff slams in letter by letter
+    tl.fromTo(".punch-l", { opacity: 0, y: 140, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(2)", stagger: 0.035 }, 2 * B);
+    // on the off-beat after: the four course areas (from the poster) snap in
+    tl.fromTo(".punch-chip", { opacity: 0, scale: 0.8, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.35, ease: "back.out(1.8)", stagger: 0.06 }, 2.5 * B);
+    // last beat of the bar: zoom through the "AI로!" line into the end card
+    tl.to("#punch-stage", { scale: 3.2, opacity: 0, filter: "blur(10px)", duration: 0.45, ease: "power3.in" }, 7 * B);
+    window.__timelines["punch"] = tl;
+  </script>
+</template>

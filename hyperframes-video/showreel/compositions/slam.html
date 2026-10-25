@@ -1,0 +1,44 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Pretendard";
+      src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+      font-weight: 45 920;
+    }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .slam-line { position: absolute; left: 0; right: 0; text-align: center; font-weight: 900; line-height: 1.1; white-space: nowrap; }
+    #slam-ai { top: 380px; font-size: 300px; }
+    #slam-hard { top: 735px; font-size: 190px; color: var(--accent, #2f6bff); }
+    #slam-learn { top: 975px; font-size: 150px; }
+    #slam-dont { top: 1150px; font-size: 150px; }
+    .slam-w { display: inline-block; }
+    /* white strike through "어렵게" */
+    #slam-strike { position: absolute; left: 230px; top: 838px; width: 620px; height: 16px; border-radius: 8px; background: var(--ink, #fff); transform-origin: 0 50%; }
+    /* the blue flood opens out of the "!" and becomes the next scene's ground */
+    #slam-flood { position: absolute; inset: 0; background: var(--accent, #2f6bff); }
+  </style>
+  <div id="root" data-composition-id="slam" data-width="1080" data-height="1920">
+    <div id="slam-ai" class="slam-line"><span class="slam-w">AI,</span></div>
+    <div id="slam-hard" class="slam-line"><span class="slam-w">어렵게</span></div>
+    <div id="slam-strike"></div>
+    <div id="slam-learn" class="slam-line"><span class="slam-w">배우지</span></div>
+    <div id="slam-dont" class="slam-line"><span class="slam-w">마세요!</span></div>
+    <div id="slam-flood"></div>
+  </div>
+  <script>
+    const B = 0.4913;                      // one beat at 122 BPM
+    const tl = gsap.timeline({ paused: true });
+    // frame 0 is the thumbnail: "AI," already on screen
+    // beat 1: "어렵게" lands big and settles with a squash
+    tl.fromTo("#slam-hard .slam-w", { scale: 1.9, opacity: 0, filter: "blur(14px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.42, ease: "expo.out" }, B);
+    tl.fromTo("#slam-hard .slam-w", { scaleY: 1 }, { keyframes: [{ scaleY: 0.86, scaleX: 1.08, duration: 0.07, ease: "power2.out" }, { scaleY: 1, scaleX: 1, duration: 0.3, ease: "back.out(3)" }] }, B + 0.12);
+    // beats 2 and 3: the words whip in from opposite sides
+    tl.fromTo("#slam-learn .slam-w", { x: -760, filter: "blur(18px)", opacity: 0 }, { x: 0, filter: "blur(0px)", opacity: 1, duration: 0.4, ease: "expo.out" }, 2 * B);
+    tl.fromTo("#slam-dont .slam-w", { x: 760, filter: "blur(18px)", opacity: 0 }, { x: 0, filter: "blur(0px)", opacity: 1, duration: 0.4, ease: "expo.out" }, 3 * B);
+    // bar 2: the hard way gets crossed out
+    tl.fromTo("#slam-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, 4 * B);
+    // last beat of the bar: blue floods out of the "!" (accelerating) and lands on the cut
+    tl.fromTo("#slam-flood", { clipPath: "circle(0px at 802px 1300px)" }, { clipPath: "circle(2300px at 802px 1300px)", duration: 0.46, ease: "power3.in" }, 7 * B);
+    window.__timelines["slam"] = tl;
+  </script>
+</template>

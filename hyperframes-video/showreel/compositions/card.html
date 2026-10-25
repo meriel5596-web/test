@@ -1,0 +1,42 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Pretendard";
+      src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+      font-weight: 45 920;
+    }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.04em; background: var(--ground, #0a0a0f); overflow: hidden; }
+    #card-ring { position: absolute; left: 305px; top: 285px; width: 470px; height: 470px; border-radius: 50%; border: 6px solid var(--accent, #2f6bff); }
+    #card-photo { position: absolute; left: 320px; top: 300px; width: 440px; height: 440px; border-radius: 50%; overflow: hidden; }
+    #card-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; transform-origin: 50% 35%; }
+    .card-line { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.1; }
+    #card-name { top: 790px; font-size: 170px; font-weight: 900; letter-spacing: 0.04em; }
+    .card-l { display: inline-block; }
+    #card-role { top: 1000px; font-size: 50px; font-weight: 700; }
+    #card-pill { position: absolute; left: 165px; top: 1110px; width: 750px; height: 124px; border-radius: 62px; background: var(--accent, #2f6bff); display: flex; align-items: center; justify-content: center; }
+    #card-ask { font-size: 60px; font-weight: 900; color: var(--ink, #fff); white-space: nowrap; }
+  </style>
+  <div id="root" data-composition-id="card" data-width="1080" data-height="1920">
+    <div id="card-ring"></div>
+    <div id="card-photo" data-layout-allow-overflow><img id="card-img" src="assets/images/portrait.png" alt="김희정 강사" /></div>
+    <div id="card-name" class="card-line"><span class="card-l">김</span><span class="card-l">희</span><span class="card-l">정</span></div>
+    <div id="card-role" class="card-line">생성형 AI 실무 활용 전문 강사</div>
+    <div id="card-pill"><span id="card-ask">문의는 DM 주세요</span></div>
+  </div>
+  <script>
+    const B = 0.4913;
+    const tl = gsap.timeline({ paused: true });
+    // iris: the photo opens from the centre of the zoom, with a settling push in on the picture
+    tl.fromTo("#card-photo", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(50% at 50% 50%)", duration: 0.5, ease: "expo.out" }, 0);
+    tl.fromTo("#card-img", { scale: 1.3 }, { scale: 1, duration: 1.2, ease: "power3.out" }, 0);
+    // secondary action: the accent ring springs out just behind it
+    tl.fromTo("#card-ring", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.2)" }, 0.08);
+    // name letter by letter, then the role
+    tl.fromTo(".card-l", { opacity: 0, filter: "blur(8px)", y: 30 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.3, ease: "power3.out", stagger: 0.08 }, 0.22);
+    tl.fromTo("#card-role", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.5);
+    // beat 1: the DM button pops; everything has landed by ~0.9 s and holds still (> 2 s)
+    tl.fromTo("#card-pill", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }, B);
+    tl.fromTo("#card-ask", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, B + 0.12);
+    window.__timelines["card"] = tl;
+  </script>
+</template>

@@ -1,0 +1,49 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Pretendard";
+      src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+      font-weight: 45 920;
+    }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; background: var(--accent, #2f6bff); overflow: hidden; }
+    #count-stage { position: absolute; inset: 0; }
+    /* slot-machine digits: each column scrolls through its digits inside a 420 px mask */
+    #count-num { position: absolute; top: 330px; left: 0; right: 0; display: flex; justify-content: center; align-items: flex-end; font-weight: 900; }
+    .count-col { height: 420px; overflow: hidden; font-size: 420px; line-height: 420px; font-variant-numeric: tabular-nums; }
+    .count-reel { display: flex; flex-direction: column; }
+    .count-reel span { display: block; height: 420px; }
+    #count-unit { font-size: 220px; line-height: 1; margin: 0 0 40px 18px; display: inline-block; transform-origin: 50% 100%; }
+    .count-line { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.1; }
+    #count-sub { top: 805px; font-size: 72px; font-weight: 700; }
+    .count-w { display: inline-block; }
+    #count-pill { position: absolute; left: 150px; top: 940px; width: 780px; height: 170px; border-radius: 85px; background: var(--ground, #0a0a0f); display: flex; align-items: center; justify-content: center; }
+    #count-true { font-size: 118px; font-weight: 900; color: var(--ink, #fff); white-space: nowrap; }
+  </style>
+  <div id="root" data-composition-id="count" data-width="1080" data-height="1920">
+    <div id="count-stage">
+      <div id="count-num">
+        <div class="count-col" data-layout-allow-overflow><div id="count-tens" class="count-reel"><span>0</span><span>1</span><span>2</span></div></div>
+        <div class="count-col" data-layout-allow-overflow><div id="count-ones" class="count-reel"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div></div>
+        <span id="count-unit">년</span>
+      </div>
+      <div id="count-sub" class="count-line"><span class="count-w">실무</span> <span class="count-w">경험으로</span> <span class="count-w">완성한</span></div>
+      <div id="count-pill"><span id="count-true">진짜 AI 교육</span></div>
+    </div>
+  </div>
+  <script>
+    const B = 0.4913;
+    const tl = gsap.timeline({ paused: true });
+    // count up 0 → 26 (the number comes from the poster): the reels spin and decelerate onto 2 and 6
+    tl.fromTo("#count-tens", { y: 0 }, { y: -2 * 420, duration: 0.9, ease: "power3.out" }, 0.04);
+    tl.fromTo("#count-ones", { y: 0 }, { y: -16 * 420, duration: 0.9, ease: "power3.out" }, 0.04);
+    // beat 2: "년" lands with a small overshoot
+    tl.fromTo("#count-unit", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.4)" }, 2 * B - 0.12);
+    // the claim: words come up, then the black pill wipes open and the line blurs in
+    tl.fromTo("#count-sub .count-w", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out", stagger: 0.08 }, 1.2);
+    tl.fromTo("#count-pill", { clipPath: "inset(0% 100% 0% 0% round 85px)" }, { clipPath: "inset(0% 0% 0% 0% round 85px)", duration: 0.4, ease: "expo.out" }, 3 * B);
+    tl.fromTo("#count-true", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 3 * B + 0.15);
+    // last beat of the bar: whip pan up (accelerating), the next scene lands from below
+    tl.to("#count-stage", { y: -1500, duration: 0.45, ease: "power3.in" }, 7 * B);
+    window.__timelines["count"] = tl;
+  </script>
+</template>
