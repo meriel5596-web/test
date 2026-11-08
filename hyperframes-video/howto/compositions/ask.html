@@ -1,0 +1,33 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #a-a { top: 340px; font-size: 100px; }
+    #a-b { top: 470px; font-size: 200px; color: var(--accent, #ffc83d); }
+    .a-c { display: inline-block; }
+    #a-photo { position: absolute; left: 430px; top: 745px; width: 220px; height: 220px; border-radius: 50%; overflow: hidden; }
+    #a-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    #a-name { top: 985px; font-size: 68px; }
+    #a-pill { position: absolute; left: 165px; top: 1110px; width: 750px; height: 124px; border-radius: 62px; background: var(--accent, #ffc83d); display: flex; align-items: center; justify-content: center; }
+    #a-ask { font-size: 60px; font-weight: 900; color: var(--ground, #0d100b); white-space: nowrap; }
+  </style>
+  <div id="root" data-composition-id="ask" data-width="1080" data-height="1920">
+    <div id="a-a" class="l">어떻게 만드는지</div>
+    <div id="a-b" class="l"><span class="a-c">궁</span><span class="a-c">금</span><span class="a-c">하</span><span class="a-c">세</span><span class="a-c">요</span><span class="a-c">?</span></div>
+    <div id="a-photo"><img src="assets/images/portrait.jpg" alt="AI 강사 김희정" /></div>
+    <div id="a-name" class="l">AI 강사 김희정</div>
+    <div id="a-pill"><span id="a-ask">수업 문의는 DM 주세요</span></div>
+  </div>
+  <script>
+    const B = 0.4913;
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#a-a", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.22, ease: "power3.out" }, 0.05);
+    tl.fromTo(".a-c", { opacity: 0, y: 80, scale: 0.7 }, { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: "back.out(2)", stagger: 0.04 }, 0.15);
+    tl.fromTo("#a-photo", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "expo.out" }, B);
+    tl.fromTo("#a-name", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, B + 0.2);
+    // on the beat: the DM button pops; everything has landed by ~1.5 s and holds still
+    tl.fromTo("#a-pill", { scale: 0.55, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.38, ease: "back.out(2)" }, 2 * B);
+    window.__timelines["ask"] = tl;
+  </script>
+</template>

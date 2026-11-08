@@ -1,0 +1,35 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #f-a { top: 400px; font-size: 100px; }
+    .f-i { position: absolute; left: 0; top: 0; width: 300px; height: 538px; object-fit: cover; border-radius: 20px; }
+    #f-q { top: 1175px; font-size: 68px; }
+    #f-q b { color: var(--accent, #ffc83d); font-weight: 900; }
+    .f-w { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="flow" data-width="1080" data-height="1920" data-layout-allow-overlap data-layout-allow-overflow>
+    <div id="f-a" class="l">이미지 5장, 한 번에</div>
+    <img id="f-1" class="f-i" style="z-index: 1" src="assets/images/s1.jpg" alt="눈을 치우는 장면" />
+    <img id="f-5" class="f-i" style="z-index: 1" src="assets/images/s5.jpg" alt="창밖을 보는 장면" />
+    <img id="f-2" class="f-i" style="z-index: 2" src="assets/images/s2.jpg" alt="행정반 안내 장면" />
+    <img id="f-4" class="f-i" style="z-index: 2" src="assets/images/s4.jpg" alt="엄지를 든 장면" />
+    <img id="f-3" class="f-i" style="z-index: 3" src="assets/images/s3.jpg" alt="눈삽을 든 장면" />
+    <div id="f-q" class="l"><span class="f-w">모두</span> <span class="f-w">같은</span> <span class="f-w">주인공,</span> <b class="f-w">어떻게?</b></div>
+  </div>
+  <script>
+    const B = 0.4913;
+    const tl = gsap.timeline({ paused: true });
+    // fan layout: shared with the first frame of the Vstory scene
+    const CX = [170, 355, 540, 725, 910], CY = [860, 810, 790, 810, 860], R = [-12, -6, 0, 6, 12];
+    tl.fromTo("#f-a", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.05);
+    [0, 1, 2, 3, 4].forEach((n, k) => {
+      tl.fromTo("#f-" + (n + 1),
+        { x: CX[n] - 150, y: CY[n] - 269 + 260, rotation: 0, scale: 0.6, opacity: 0 },
+        { x: CX[n] - 150, y: CY[n] - 269, rotation: R[n], scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.5)" }, 0.2 + k * 0.12);
+    });
+    tl.fromTo(".f-w", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out", stagger: 0.09 }, 3 * B);
+    window.__timelines["flow"] = tl;
+  </script>
+</template>

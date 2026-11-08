@@ -12,10 +12,13 @@ if (!silent || !out) { console.error('usage: node sound/mix.mjs <silent.mp4> <ou
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const SFX = path.resolve(ROOT, '../.agents/skills/sound-effects/sfx');
 const cues = JSON.parse(fs.readFileSync(cuesArg ? path.resolve(cuesArg) : path.join(ROOT, 'sound/cues.json'), 'utf8'));
-const DUR = 15, MUSIC_DB = cues.music.gain_db ?? -13, FADE_OUT = cues.music.fade_out ?? 1.4;
+const DUR = cues.duration ?? 15, MUSIC_DB = cues.music.gain_db ?? -13, FADE_OUT = cues.music.fade_out ?? 1.4;
 
 const inputs = ['-i', silent, '-ss', String(cues.music.offset), '-t', String(DUR), '-i', path.join(ROOT, cues.music.file)];
-const chains = [`[1:a]aformat=sample_rates=48000:channel_layouts=stereo,volume=${MUSIC_DB}dB,` +
+// optional cues.music.duck = {from, to, db}: music dips under real voice, with 0.15 s ramps
+const d = cues.music.duck;
+const duck = d ? `volume='${Math.pow(10, d.db / 20).toFixed(4)}+(1-${Math.pow(10, d.db / 20).toFixed(4)})*(1-clip((t-${d.from})/0.15,0,1)*clip((${d.to}-t)/0.15,0,1))':eval=frame,` : '';
+const chains = [`[1:a]aformat=sample_rates=48000:channel_layouts=stereo,volume=${MUSIC_DB}dB,${duck}` +
   `afade=t=in:d=0.25,afade=t=out:st=${DUR - FADE_OUT}:d=${FADE_OUT}[m]`];
 const labels = ['[m]'];
 cues.cues.forEach((c, i) => {

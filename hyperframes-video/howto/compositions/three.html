@@ -1,0 +1,30 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    /* starts exactly where the last scene's input box was: match cut */
+    #t-box { position: absolute; left: 90px; top: 1010px; width: 900px; height: 118px; border-radius: 28px; border: 4px solid var(--accent, #ffc83d); display: flex; align-items: center; justify-content: center; font-size: 66px; font-weight: 900; }
+    #t-a { top: 535px; font-size: 92px; }
+    #t-a b { color: var(--accent, #ffc83d); font-weight: 900; }
+    .t-card { position: absolute; left: 90px; width: 900px; height: 160px; border-radius: 24px; background: color-mix(in srgb, var(--ink, #fff) 12%, var(--ground, #0d100b)); padding: 26px 44px; }
+    .t-name { font-size: 54px; font-weight: 800; letter-spacing: -0.03em; }
+    .t-bar { height: 20px; margin-top: 16px; border-radius: 10px; background: color-mix(in srgb, var(--ink, #fff) 34%, var(--ground, #0d100b)); }
+  </style>
+  <div id="root" data-composition-id="three" data-width="1080" data-height="1920">
+    <div id="t-box">제설작업 안내</div>
+    <div id="t-a" class="l"><b>3가지</b>가 한 번에</div>
+    <div id="t-c1" class="t-card" style="top: 670px"><div class="t-name">5장면 스토리보드</div><div class="t-bar" style="width: 84%"></div></div>
+    <div id="t-c2" class="t-card" style="top: 850px"><div class="t-name">Google Flow 이미지 프롬프트</div><div class="t-bar" style="width: 92%"></div></div>
+    <div id="t-c3" class="t-card" style="top: 1030px"><div class="t-name">Vstory 영상 프롬프트</div><div class="t-bar" style="width: 70%"></div></div>
+  </div>
+  <script>
+    const B = 0.4913;
+    const tl = gsap.timeline({ paused: true });
+    // the box rises to the top and the result unfolds beneath it
+    tl.fromTo("#t-box", { y: 0 }, { y: -620, duration: 0.45, ease: "expo.out" }, 0);
+    tl.fromTo("#t-a", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.3);
+    tl.fromTo(".t-card", { clipPath: "inset(0% 100% 0% 0% round 24px)" }, { clipPath: "inset(0% 0% 0% 0% round 24px)", duration: 0.4, ease: "expo.out", stagger: 0.16 }, 2 * B);
+    window.__timelines["three"] = tl;
+  </script>
+</template>

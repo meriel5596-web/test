@@ -1,0 +1,20 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #r-a { top: 300px; font-size: 104px; color: var(--accent, #ffc83d); }
+    #r-frame { position: absolute; left: 300px; top: 445px; width: 480px; height: 853px; border-radius: 36px; overflow: hidden; }
+    #r-v { display: block; width: 480px; height: 853px; object-fit: cover; }
+  </style>
+  <div id="root" data-composition-id="result" data-width="1080" data-height="1920">
+    <div id="r-a" class="l">이렇게 완성</div>
+    <div id="r-frame"><video id="r-v" class="clip" data-start="0" data-duration="3.934" src="assets/video/result.mp4" muted playsinline></video></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#r-frame", { clipPath: "inset(100% 0% 0% 0% round 36px)" }, { clipPath: "inset(0% 0% 0% 0% round 36px)", duration: 0.5, ease: "expo.out" }, 0);
+    tl.fromTo("#r-a", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out" }, 0.12);
+    window.__timelines["result"] = tl;
+  </script>
+</template>

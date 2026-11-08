@@ -1,0 +1,45 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #v-a { top: 395px; font-size: 92px; }
+    #v-a b { color: var(--accent, #ffc83d); font-weight: 900; }
+    .v-i { position: absolute; left: 0; top: 0; width: 300px; height: 538px; object-fit: cover; border-radius: 20px; }
+    .v-name { position: absolute; left: 90px; width: 140px; font-size: 48px; font-weight: 800; line-height: 74px; white-space: nowrap; }
+    .v-track { position: absolute; left: 240px; width: 750px; height: 74px; border-radius: 14px; background: var(--accent, #ffc83d); transform-origin: 0 50%; }
+    /* the playhead runs through the finished timeline */
+    #v-head { position: absolute; left: 240px; top: 862px; width: 8px; height: 300px; border-radius: 4px; background: var(--ink, #fff); }
+  </style>
+  <div id="root" data-composition-id="vstory" data-width="1080" data-height="1920" data-layout-allow-overlap data-layout-allow-overflow>
+    <div id="v-a" class="l">이미지가 <b>영상</b>으로</div>
+    <img id="v-1" class="v-i" style="z-index: 1" src="assets/images/s1.jpg" alt="" />
+    <img id="v-5" class="v-i" style="z-index: 1" src="assets/images/s5.jpg" alt="" />
+    <img id="v-2" class="v-i" style="z-index: 2" src="assets/images/s2.jpg" alt="" />
+    <img id="v-4" class="v-i" style="z-index: 2" src="assets/images/s4.jpg" alt="" />
+    <img id="v-3" class="v-i" style="z-index: 3" src="assets/images/s3.jpg" alt="" />
+    <div id="v-n1" class="v-name" style="top: 880px">자막</div><div id="v-t1" class="v-track" style="top: 880px"></div>
+    <div id="v-n2" class="v-name" style="top: 975px">음성</div><div id="v-t2" class="v-track" style="top: 975px"></div>
+    <div id="v-n3" class="v-name" style="top: 1070px">음악</div><div id="v-t3" class="v-track" style="top: 1070px"></div>
+    <div id="v-head"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // match cut from the Flow fan: same five images, same places, then they line up into a timeline
+    const CX = [170, 355, 540, 725, 910], CY = [860, 810, 790, 810, 860], R = [-12, -6, 0, 6, 12];
+    const SX = [120, 330, 540, 750, 960];
+    [0, 1, 2, 3, 4].forEach((n) => {
+      tl.fromTo("#v-" + (n + 1),
+        { x: CX[n] - 150, y: CY[n] - 269, rotation: R[n], scale: 1 },
+        { x: SX[n] - 150, y: 680 - 269, rotation: 0, scale: 0.62, duration: 0.7, ease: "power3.inOut" }, 0);
+    });
+    tl.fromTo("#v-a", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.1);
+    // the three tracks draw in one after the other
+    [1, 2, 3].forEach((n, k) => {
+      tl.fromTo("#v-n" + n, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.2, ease: "power3.out" }, 0.7 + k * 0.14);
+      tl.fromTo("#v-t" + n, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 0.72 + k * 0.14);
+    });
+    tl.fromTo("#v-head", { x: 0, opacity: 0 }, { x: 742, opacity: 1, duration: 3.0, ease: "power1.inOut" }, 1.5);
+    window.__timelines["vstory"] = tl;
+  </script>
+</template>

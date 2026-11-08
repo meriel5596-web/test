@@ -1,0 +1,36 @@
+{
+  "video": "howto (30 s, 30 fps)",
+  "duration": 30,
+  "music": {
+    "file": "sound-effects-cache/music-130.mp3",
+    "title": "Tech House vibes",
+    "artist": "Alejandro Magaña (A. M.)",
+    "source": "https://mixkit.co (Mixkit #130, https://assets.mixkit.co/music/130/130.mp3)",
+    "license": "Mixkit Stock Music Free License",
+    "offset": 12.35,
+    "gain_db": -13,
+    "fade_out": 1.5,
+    "duck": { "from": 21.6, "to": 25.55, "db": -14 },
+    "note": "beats in the video at about 0.006 + n x 0.4913 s; scene cuts on beats 8, 16, 24, 34, 44, 52; music dips while the finished video's own sound plays"
+  },
+  "cues": [
+    { "t": 0.2,    "start": 0.22,   "type": "reveal",    "file": "impact/kenney-impact-impactpunch-heavy-000.ogg", "gain_db": -10, "desc": "'촬영 없이' lands" },
+    { "t": 3.92,   "start": 3.83,   "type": "scene_cut", "file": "kit/whoosh.ogg",                                 "gain_db": -4,  "desc": "dark wipe over the picture" },
+    { "t": 4.11,   "start": 4.04,   "type": "movement",  "file": "transition/fs-702773-swipe-wav.ogg",             "gain_db": -10, "desc": "instructions document opens" },
+    { "t": 5.898,  "start": 5.93,   "type": "click",     "file": "kit/click.ogg",                                  "gain_db": -2,  "desc": "topic starts typing" },
+    { "t": 6.25,   "start": 6.28,   "type": "click",     "file": "click/kenney-interface-select-001.ogg",          "gain_db": 0,   "desc": "topic typed" },
+    { "t": 7.867,  "start": 7.76,   "type": "movement",  "file": "transition/fs-786514-swoosh-v2.ogg",             "gain_db": -12, "desc": "input box rises" },
+    { "t": 8.85,   "start": 8.88,   "type": "appear",    "file": "kit/pop.ogg",                                    "gain_db": 6,   "desc": "card 1" },
+    { "t": 9.01,   "start": 9.04,   "type": "appear",    "file": "click/kenney-interface-click-001.ogg",           "gain_db": 4,   "desc": "card 2" },
+    { "t": 9.17,   "start": 9.21,   "type": "appear",    "file": "click/kenney-interface-toggle-001.ogg",          "gain_db": -2,  "desc": "card 3" },
+    { "t": 12.0,   "start": 11.97,  "type": "appear",    "file": "pop/fs-824189-pop-in-sfx.ogg",                   "gain_db": -2,  "desc": "five images fan out" },
+    { "t": 13.7,   "start": 13.7,   "type": "success",   "file": "ding/kenney-interface-confirmation-002.ogg",     "gain_db": -10, "desc": "'어떻게?' lands" },
+    { "t": 17.05,  "start": 17.03,  "type": "movement",  "file": "whoosh/fs-683101-quick-woosh.ogg",               "gain_db": -1,  "desc": "images line up into a timeline" },
+    { "t": 17.42,  "start": 17.45,  "type": "reveal",    "file": "impact/kenney-impact-impactsoft-heavy-000.ogg",  "gain_db": -6,  "desc": "tracks draw in" },
+    { "t": 21.633, "start": 19.685, "type": "build_up",  "file": "kit/riser.ogg",                                  "gain_db": -10, "desc": "riser peaks on the finished video" },
+    { "t": 21.633, "start": 21.608, "type": "reveal",    "file": "kit/impact.ogg",                                 "gain_db": 2,   "desc": "finished video opens" },
+    { "t": 21.633, "start": 21.633, "type": "bed",       "file": "../../../../hyperframes-video/sound-effects-cache/howto-result.wav", "gain_db": -4, "desc": "the finished video's own sound" },
+    { "t": 25.567, "start": 25.5,   "type": "scene_cut", "file": "whoosh/fs830856.ogg",                            "gain_db": -6,  "desc": "cut to the question" },
+    { "t": 26.55,  "start": 26.58,  "type": "success",   "file": "ding/kenney-interface-confirmation-001.ogg",     "gain_db": -8,  "desc": "'수업 문의는 DM 주세요' pops" }
+  ]
+}
