@@ -6,24 +6,29 @@
     #h-v { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
     /* the finished video plays behind; the scrim keeps the words readable over snow */
     #h-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,16,11,0.82) 0%, rgba(13,16,11,0.78) 56%, rgba(13,16,11,0) 72%); }
-    #h-a { top: 430px; font-size: 170px; }
-    #h-b { top: 640px; font-size: 190px; color: var(--accent, #ffc83d); }
-    #h-c { top: 880px; font-size: 104px; }
+    #h-q1 { top: 480px; font-size: 160px; }
+    #h-q2 { top: 680px; font-size: 118px; }
+    #h-free { top: 400px; font-size: 380px; color: var(--accent, #ffc83d); }
+    #h-tail { top: 860px; font-size: 100px; }
     #h-wipe { position: absolute; inset: 0; background: var(--ground, #0d100b); }
   </style>
   <div id="root" data-composition-id="hook" data-width="1080" data-height="1920">
     <video id="h-v" class="clip" data-start="0" data-duration="3.933" src="assets/video/hook.mp4" muted playsinline></video>
     <div id="h-scrim"></div>
-    <div id="h-a" class="l">이 영상,</div>
-    <div id="h-b" class="l">촬영 없이</div>
-    <div id="h-c" class="l">AI로 만들었어요</div>
+    <div id="h-q1" class="l">이 3D 영상,</div>
+    <div id="h-q2" class="l">얼마 들었을까요?</div>
+    <div id="h-free" class="l">무료</div>
+    <div id="h-tail" class="l">기능으로 만들었어요</div>
     <div id="h-wipe"></div>
   </div>
   <script>
+    const B = 0.4913;
     const tl = gsap.timeline({ paused: true });
-    // frame 0 is the thumbnail: the video and "이 영상," are already there
-    tl.fromTo("#h-b", { opacity: 0, scale: 1.5, filter: "blur(12px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.4, ease: "expo.out" }, 0.2);
-    tl.fromTo("#h-c", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out" }, 0.45);
+    // frame 0 is the thumbnail: the question is already on screen and holds
+    tl.to(["#h-q1", "#h-q2"], { opacity: 0, filter: "blur(8px)", duration: 0.13, ease: "power3.in" }, 3.5 * B - 0.13);
+    // the answer lands big on the off-beat
+    tl.fromTo("#h-free", { opacity: 0, scale: 1.7, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, 3.5 * B);
+    tl.fromTo("#h-tail", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out" }, 3.5 * B + 0.12);
     // the dark ground rises over the picture, accelerating
     tl.fromTo("#h-wipe", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.25, ease: "power3.in" }, 3.67);
     window.__timelines["hook"] = tl;

@@ -14,7 +14,7 @@
     "note": "beats in the video at about 0.006 + n x 0.4913 s; scene cuts on beats 8, 16, 24, 34, 44, 52; music dips while the finished video's own sound plays"
   },
   "cues": [
-    { "t": 0.2,    "start": 0.22,   "type": "reveal",    "file": "impact/kenney-impact-impactpunch-heavy-000.ogg", "gain_db": -10, "desc": "'촬영 없이' lands" },
+    { "t": 1.72,   "start": 1.73,   "type": "reveal",    "file": "impact/kenney-impact-impactpunch-heavy-000.ogg", "gain_db": -4, "desc": "'무료' lands" },
     { "t": 3.92,   "start": 3.83,   "type": "scene_cut", "file": "kit/whoosh.ogg",                                 "gain_db": -4,  "desc": "dark wipe over the picture" },
     { "t": 4.11,   "start": 4.04,   "type": "movement",  "file": "transition/fs-702773-swipe-wav.ogg",             "gain_db": -10, "desc": "instructions document opens" },
     { "t": 5.898,  "start": 5.93,   "type": "click",     "file": "kit/click.ogg",                                  "gain_db": -2,  "desc": "topic starts typing" },
