@@ -1,0 +1,31 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #w2-a { top: 550px; font-size: 104px; }
+    #w2-b { top: 680px; font-size: 150px; color: var(--accent, #ff7a1a); }
+    .w2-c { display: inline-block; }
+    /* the stairs stand on y = 1200 */
+    .w2-s { position: absolute; bottom: 720px; width: 300px; background: var(--accent, #ff7a1a); transform-origin: 50% 100%; }
+    #w2-wipe { position: absolute; inset: 0; background: var(--accent, #ff7a1a); }
+  </style>
+  <div id="root" data-composition-id="why2" data-width="1080" data-height="1920">
+    <div id="w2-a" class="l">초보자 눈높이로</div>
+    <div id="w2-b" class="l"><span class="w2-c">단</span><span class="w2-c">계</span><span class="w2-c">별</span> <span class="w2-c">설</span><span class="w2-c">명</span></div>
+    <div id="w2-s1" class="w2-s" style="left: 90px; height: 110px"></div>
+    <div id="w2-s2" class="w2-s" style="left: 390px; height: 220px"></div>
+    <div id="w2-s3" class="w2-s" style="left: 690px; height: 330px"></div>
+    <div id="w2-wipe"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // the wipe from the last scene opens upward
+    tl.fromTo("#w2-wipe", { clipPath: "inset(0% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.3, ease: "expo.out" }, 0);
+    tl.fromTo("#w2-a", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.22, ease: "power3.out" }, 0.1);
+    tl.fromTo(".w2-c", { opacity: 0, y: 60, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(1.8)", stagger: 0.03 }, 0.16);
+    // the stairs build one step at a time, each step rising past its height and settling
+    tl.fromTo(".w2-s", { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: "back.out(1.5)", stagger: 0.08 }, 0.25);
+    window.__timelines["why2"] = tl;
+  </script>
+</template>

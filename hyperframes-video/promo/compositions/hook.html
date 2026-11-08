@@ -1,0 +1,23 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #h-a { top: 430px; font-size: 104px; }
+    #h-b { top: 585px; font-size: 210px; }
+    #h-mask { position: absolute; left: 0; right: 0; top: 830px; height: 430px; overflow: hidden; text-align: center; font-size: 380px; line-height: 430px; font-weight: 900; color: var(--accent, #ff7a1a); white-space: nowrap; }
+    #h-c { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1920">
+    <div id="h-a" class="l">AI 강사 김희정이</div>
+    <div id="h-b" class="l">다른 이유</div>
+    <div id="h-mask" data-layout-allow-overflow><span id="h-c">4가지</span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // frame 0 is the thumbnail: the first line is already there
+    tl.fromTo("#h-b", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0.02);
+    tl.fromTo("#h-c", { yPercent: 105 }, { yPercent: 0, duration: 0.32, ease: "expo.out" }, 0.08);
+    window.__timelines["hook"] = tl;
+  </script>
+</template>

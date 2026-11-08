@@ -1,0 +1,28 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #w4-stage { position: absolute; inset: 0; transform-origin: 540px 900px; }
+    #w4-a { top: 560px; font-size: 130px; }
+    .w4-card { position: absolute; left: 90px; width: 900px; height: 226px; border-radius: 24px; background: color-mix(in srgb, var(--ink, #fff) 12%, var(--ground, #0a0a0f)); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    .w4-big { font-size: 116px; font-weight: 900; line-height: 1.15; color: var(--accent, #ff7a1a); }
+    .w4-who { font-size: 46px; font-weight: 700; letter-spacing: -0.03em; }
+  </style>
+  <div id="root" data-composition-id="why4" data-width="1080" data-height="1920">
+    <div id="w4-stage">
+      <div id="w4-a" class="l">검증된 현장</div>
+      <div id="w4-c1" class="w4-card" style="top: 745px"><div class="w4-big">500명 이상</div><div class="w4-who">누적 온·오프라인 교육 참여자</div></div>
+      <div id="w4-c2" class="w4-card" style="top: 990px"><div class="w4-big">168건</div><div class="w4-who">한 강의에서 받은 수강 후기</div></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#w4-a", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.05);
+    // mask reveal, left to right, one card after the other
+    tl.fromTo(".w4-card", { clipPath: "inset(0% 100% 0% 0% round 24px)" }, { clipPath: "inset(0% 0% 0% 0% round 24px)", duration: 0.4, ease: "expo.out", stagger: 0.08 }, 0.15);
+    // push in: the stage accelerates toward the camera and clears
+    tl.to("#w4-stage", { scale: 1.14, opacity: 0, duration: 0.25, ease: "power3.in" }, 2.217);
+    window.__timelines["why4"] = tl;
+  </script>
+</template>

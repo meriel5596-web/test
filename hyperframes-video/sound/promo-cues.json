@@ -1,0 +1,31 @@
+{
+  "video": "promo (15 s, 30 fps)",
+  "music": {
+    "file": "sound-effects-cache/music-130.mp3",
+    "title": "Tech House vibes",
+    "artist": "Alejandro Magaña (A. M.)",
+    "source": "https://mixkit.co (Mixkit #130, https://assets.mixkit.co/music/130/130.mp3)",
+    "license": "Mixkit Stock Music Free License",
+    "offset": 12.35,
+    "gain_db": -13,
+    "fade_out": 1.24,
+    "note": "beats in the video at 0.006 + n x 0.4913 s; scene cuts on beats 4, 9, 14, 19, 24; the music stops 9.05-9.33 s and comes back on the cut to reason 4"
+  },
+  "cues": [
+    { "t": 0.08,   "start": 0.10,   "type": "reveal",    "file": "impact/kenney-impact-impactpunch-heavy-000.ogg", "gain_db": -10, "desc": "'4가지' rises" },
+    { "t": 1.967,  "start": 1.942,  "type": "reveal",    "file": "kit/impact.ogg",                                 "gain_db": 2,   "desc": "cut to reason 1, '26년' rises" },
+    { "t": 4.40,   "start": 4.315,  "type": "scene_cut", "file": "kit/whoosh.ogg",                                 "gain_db": -4,  "desc": "orange panel wipes over" },
+    { "t": 4.683,  "start": 4.713,  "type": "appear",    "file": "kit/pop.ogg",                                    "gain_db": 6,   "desc": "stair 1" },
+    { "t": 4.763,  "start": 4.793,  "type": "appear",    "file": "click/kenney-interface-click-001.ogg",           "gain_db": 4,   "desc": "stair 2" },
+    { "t": 4.843,  "start": 4.873,  "type": "appear",    "file": "click/kenney-interface-select-001.ogg",          "gain_db": 0,   "desc": "stair 3" },
+    { "t": 6.9,    "start": 6.826,  "type": "movement",  "file": "transition/fs-702773-swipe-wav.ogg",             "gain_db": -10, "desc": "last stair opens into the panel (match cut)" },
+    { "t": 7.1,    "start": 7.075,  "type": "appear",    "file": "pop/fs-824189-pop-in-sfx.ogg",                   "gain_db": -2,  "desc": "'결과물을' pops in" },
+    { "t": 9.30,   "start": 9.16,   "type": "scene_cut", "file": "transition/fs-786514-swoosh-v2.ogg",             "gain_db": -12, "desc": "panel closes upward, in the music's stop" },
+    { "t": 9.483,  "start": 9.516,  "type": "reveal",    "file": "impact/kenney-impact-impactsoft-heavy-000.ogg",  "gain_db": -6,  "desc": "card '500명 이상' opens" },
+    { "t": 9.563,  "start": 9.593,  "type": "click",     "file": "kit/click.ogg",                                  "gain_db": -2,  "desc": "card '168건' opens" },
+    { "t": 11.8,   "start": 9.852,  "type": "build_up",  "file": "kit/riser.ogg",                                  "gain_db": -10, "desc": "riser peaks on the end card" },
+    { "t": 11.75,  "start": 11.65,  "type": "scene_cut", "file": "whoosh/fs-127197-fast-simple-chop-5-aif.ogg",    "gain_db": -6,  "desc": "push in clears reason 4" },
+    { "t": 11.8,   "start": 11.81,  "type": "movement",  "file": "whoosh/fs-683101-quick-woosh.ogg",               "gain_db": -1,  "desc": "photo rises" },
+    { "t": 12.291, "start": 12.32,  "type": "success",   "file": "ding/kenney-interface-confirmation-002.ogg",     "gain_db": -10, "desc": "'문의는 DM 주세요' pops" }
+  ]
+}

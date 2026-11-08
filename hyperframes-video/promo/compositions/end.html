@@ -1,0 +1,32 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    .l { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1.12; font-weight: 900; }
+    #e-photo { position: absolute; left: 330px; top: 300px; width: 420px; height: 420px; border-radius: 50%; overflow: hidden; }
+    #e-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 40%; }
+    #e-name { top: 750px; font-size: 170px; letter-spacing: 0.04em; }
+    .e-l { display: inline-block; }
+    #e-role { top: 970px; font-size: 50px; font-weight: 700; letter-spacing: -0.03em; }
+    #e-pill { position: absolute; left: 165px; top: 1090px; width: 750px; height: 124px; border-radius: 62px; background: var(--accent, #ff7a1a); display: flex; align-items: center; justify-content: center; }
+    #e-ask { font-size: 60px; font-weight: 900; color: var(--ground, #0a0a0f); white-space: nowrap; }
+  </style>
+  <div id="root" data-composition-id="end" data-width="1080" data-height="1920">
+    <div id="e-photo" data-layout-allow-overflow><img id="e-img" src="assets/images/portrait.jpg" alt="AI 강사 김희정" /></div>
+    <div id="e-name" class="l"><span class="e-l">김</span><span class="e-l">희</span><span class="e-l">정</span></div>
+    <div id="e-role" class="l">생성형 AI 실무 활용 전문 강사</div>
+    <div id="e-pill"><span id="e-ask">문의는 DM 주세요</span></div>
+  </div>
+  <script>
+    const B = 0.4913;
+    const tl = gsap.timeline({ paused: true });
+    // mask reveal from below, with a settling push in on the picture
+    tl.fromTo("#e-photo", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "expo.out" }, 0);
+    tl.fromTo("#e-img", { scale: 1.25 }, { scale: 1, duration: 1.1, ease: "power3.out" }, 0);
+    tl.fromTo(".e-l", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.28, ease: "power3.out", stagger: 0.08 }, 0.2);
+    tl.fromTo("#e-role", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.45);
+    // on the beat: the DM button pops; everything has landed by ~0.9 s and holds still
+    tl.fromTo("#e-pill", { scale: 0.55, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.38, ease: "back.out(2)" }, B);
+    window.__timelines["end"] = tl;
+  </script>
+</template>

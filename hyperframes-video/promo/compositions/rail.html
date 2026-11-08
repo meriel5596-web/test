@@ -1,0 +1,29 @@
+<template>
+  <style>
+    @font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+    #root { position: absolute; inset: 0; font-family: "Pretendard", sans-serif; color: var(--ink, #fff); letter-spacing: -0.045em; overflow: hidden; }
+    /* the running number and the four-part progress bar tie the reasons together */
+    #rail-num { position: absolute; top: 300px; left: 0; right: 0; display: flex; justify-content: center; align-items: flex-end; font-weight: 900; }
+    #rail-col { height: 230px; overflow: hidden; font-size: 220px; line-height: 230px; color: var(--accent, #ff7a1a); }
+    #rail-reel span { display: block; height: 230px; text-align: center; }
+    #rail-of { font-size: 72px; line-height: 1; margin: 0 0 34px 14px; }
+    .rail-seg { position: absolute; top: 1262px; width: 190px; height: 14px; border-radius: 7px; background: color-mix(in srgb, var(--ink, #fff) 22%, var(--ground, #0a0a0f)); overflow: hidden; }
+    .rail-fill { display: block; width: 100%; height: 100%; background: var(--accent, #ff7a1a); transform-origin: 0 50%; }
+  </style>
+  <div id="root" data-composition-id="rail" data-width="1080" data-height="1920">
+    <div id="rail-num"><div id="rail-col" data-layout-allow-overflow><div id="rail-reel"><span>1</span><span>2</span><span>3</span><span>4</span></div></div><span id="rail-of">/ 4</span></div>
+    <div class="rail-seg" style="left: 136px"><span id="rail-f0" class="rail-fill"></span></div>
+    <div class="rail-seg" style="left: 342px"><span id="rail-f1" class="rail-fill"></span></div>
+    <div class="rail-seg" style="left: 548px"><span id="rail-f2" class="rail-fill"></span></div>
+    <div class="rail-seg" style="left: 754px"><span id="rail-f3" class="rail-fill"></span></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const T = [0, 2.466, 4.933, 7.366];   // each reason's start, on the beat
+    T.forEach((t, i) => {
+      tl.fromTo("#rail-f" + i, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "expo.out" }, t);
+      if (i) tl.fromTo("#rail-reel", { y: -230 * (i - 1) }, { y: -230 * i, duration: 0.4, ease: "power4.out", immediateRender: false }, t);
+    });
+    window.__timelines["rail"] = tl;
+  </script>
+</template>
